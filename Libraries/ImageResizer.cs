@@ -17,6 +17,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Drawing;
 
 namespace Cube.Images
@@ -41,13 +42,24 @@ namespace Cube.Images
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <remarks>
+        /// 指定された Image オブジェクトが NULL の場合、または Image
+        /// オブジェクトの幅または高さが 0 の場合は例外が送出されます。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public ImageResizer(Image original)
         {
+            if (original == null || original.Width < 1 || original.Height < 1)
+            {
+                throw new ArgumentException();
+            }
+
             Original = original;
-            _width   = original?.Width  ?? 0;
-            _height  = original?.Height ?? 0;
+            _width   = original.Width;
+            _height  = original.Height;
+            _ratio   = _height / (double)_width;
         }
 
         #endregion
@@ -74,7 +86,14 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Image Resized { get; private set; }
+        public Image Resized
+        {
+            get
+            {
+                if (_resized == null) _resized = Resize();
+                return _resized;
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -93,7 +112,14 @@ namespace Cube.Images
         public int Width
         {
             get { return _width; }
-            set { _width = value; }
+            set
+            {
+                if (_width == value) return;
+                DisposeImage();
+                _width = value;
+                if (!PreserveAspectRatio) return;
+                _height = (int)(_width * _ratio);
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -113,8 +139,28 @@ namespace Cube.Images
         public int Height
         {
             get { return _height; }
-            set { _height = value; }
+            set
+            {
+                if (_height == value) return;
+                DisposeImage();
+                _height = value;
+                if (!PreserveAspectRatio) return;
+                _width = (int)(_height / _ratio);
+            }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShrinkOnly
+        ///
+        /// <summary>
+        /// オリジナル画像の幅または高さよりリサイズ後の幅または高さが
+        /// 大きい場合、リサイズ処理をスキップするかどうかを示す値を
+        /// 取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool ShrinkOnly { get; set; } = false;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -135,17 +181,57 @@ namespace Cube.Images
         /// <summary>
         /// オリジナル画像のアスペクト比（縦横比）を取得します。
         /// </summary>
+        /// 
+        /// <remarks>
+        /// アスペクト比は短辺を 1 とした時の長辺の長さを表します。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public double AspectRatio => (
-            Original?.Width < Original?.Height ?
-            Original?.Height / (double)Original?.Width :
-            Original?.Width  / (double)Original?.Width
-        ) ?? 0.0;
+        public double AspectRatio => _ratio > 1.0 ? _ratio : 1 / _ratio;
 
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLongSide
+        ///
+        /// <summary>
+        /// 長辺の長さを指定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// PreserveAspectRatio が true に設定されている場合、短辺の長さも
+        /// 自動的に変更されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetLongSide(int value)
+        {
+            if (Original.Width < Original.Height) Height = value;
+            else Width = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetShortSide
+        ///
+        /// <summary>
+        /// 短辺の長さを指定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// PreserveAspectRatio が true に設定されている場合、長辺の長さも
+        /// 自動的に変更されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetShortSide(int value)
+        {
+            if (Original.Width < Original.Height) Width = value;
+            else Height = value;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -156,13 +242,60 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path) => Resized?.Save(path);
+        public void Save(string path) => Resized.Save(path);
+
+        #endregion
+
+        #region Others
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resize
+        ///
+        /// <summary>
+        /// リサイズ処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private Image Resize()
+        {
+            var grow = (Width > Original.Width || Height > Original.Height);
+            if (ShrinkOnly && grow) return Original.Clone() as Image;
+
+            var dest = new Bitmap(Width, Height, Original.PixelFormat);
+            using (var gs = Graphics.FromImage(dest))
+            {
+                gs.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                gs.DrawImage(Original, 0, 0, Width, Height);
+            }
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DisposeImage
+        ///
+        /// <summary>
+        /// リサイズ後の Image オブジェクトを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void DisposeImage()
+        {
+            if (_resized == null) return;
+            _resized.Dispose();
+            _resized = null;
+        }
 
         #endregion
 
         #region Fields
         private int _width;
         private int _height;
+        private double _ratio; // 幅を基準とした縦横比
+        private Image _resized;
         #endregion
     }
 }
