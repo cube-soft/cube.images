@@ -151,6 +151,17 @@ namespace Cube.Images
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ResizeMode
+        ///
+        /// <summary>
+        /// リサイズ方法を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ImageResizeMode ResizeMode { get; set; } = ImageResizeMode.Default;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ShrinkOnly
         ///
         /// <summary>
@@ -265,12 +276,43 @@ namespace Cube.Images
             var dest = new Bitmap(Width, Height, Original.PixelFormat);
             using (var gs = Graphics.FromImage(dest))
             {
-                gs.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                SetResizeMode(gs);
                 gs.DrawImage(Original, 0, 0, Width, Height);
             }
             return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetResizeMode
+        ///
+        /// <summary>
+        /// リサイズ方法を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetResizeMode(Graphics gs)
+        {
+            switch (ResizeMode)
+            {
+                case ImageResizeMode.HighQuality:
+                    gs.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                    gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    break;
+                case ImageResizeMode.HighSpeed:
+                    gs.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+                    gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                    break;
+                case ImageResizeMode.Default:
+                    gs.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.Default;
+                    gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.Default;
+                    gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.Default;
+                    break;
+                default:
+                    break;
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -297,5 +339,21 @@ namespace Cube.Images
         private double _ratio; // 幅を基準とした縦横比
         private Image _resized;
         #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ImageResizeMode
+    /// 
+    /// <summary>
+    /// リサイズ処理の方法を表す列挙型です。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public enum ImageResizeMode : uint
+    {
+        Default,
+        HighQuality,
+        HighSpeed,
     }
 }
