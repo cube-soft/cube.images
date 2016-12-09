@@ -18,7 +18,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
-using System.Drawing;
 using NUnit.Framework;
 using IoEx = Alphaleonis.Win32.Filesystem;
 
@@ -82,8 +81,32 @@ namespace Cube.Images.Tests
             resizer.ResizeMode = mode;
             resizer.Width = width;
 
-            var dest = CreateFilePath(resizer, "quality");
+            var dest = CreateFilePath(resizer, "mode");
             resizer.Save(dest);
+
+            Assert.That(IoEx.File.Exists(dest));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save_Jpeg
+        ///
+        /// <summary>
+        /// JPEG 形式で保存するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase( 25, 256)]
+        [TestCase( 50, 256)]
+        [TestCase( 75, 256)]
+        [TestCase(100, 256)]
+        public void Save_Jpeg(long quality, int width)
+        {
+            var resizer = Create();
+            resizer.Width = width;
+
+            var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
+            resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
 
             Assert.That(IoEx.File.Exists(dest));
         }
