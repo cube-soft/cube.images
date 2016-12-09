@@ -19,6 +19,8 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
 using IoEx = Alphaleonis.Win32.Filesystem;
 
 namespace Cube.Images
@@ -44,6 +46,26 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /* ----------------------------------------------------------------- */
+        public ImageResizer(string original)
+        {
+            using (var stream = IoEx.File.Open(original, System.IO.FileMode.Open))
+            {
+                var image = Image.FromStream(stream);
+                if (image == null || image.Width < 1 || image.Height < 1) throw new ArgumentException();
+                Original = Image.FromStream(stream);
+            }
+            Initialize();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ImageResizer
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
         /// <remarks>
         /// 指定された Image オブジェクトが NULL の場合、または Image
         /// オブジェクトの幅または高さが 0 の場合は例外が送出されます。
@@ -52,15 +74,9 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public ImageResizer(Image original)
         {
-            if (original == null || original.Width < 1 || original.Height < 1)
-            {
-                throw new ArgumentException();
-            }
-
+            if (original == null || original.Width < 1 || original.Height < 1) throw new ArgumentException();
             Original = original;
-            _width   = original.Width;
-            _height  = original.Height;
-            _ratio   = _height / (double)_width;
+            Initialize();
         }
 
         #endregion
@@ -254,17 +270,73 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path)
+        public void Save(string path) => Save(path, Original.RawFormat);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// リサイズ後の Image オブジェクトをファイルに保存します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string path, ImageFormat format)
+        {
+            using (var stream = IoEx.File.Create(path)) Resized.Save(stream, format);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// リサイズ後の Image オブジェクトをファイルに保存します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string path, ImageFormat format, EncoderParameters parameters)
+            => Save(path,
+            ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
+            parameters
+        );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// リサイズ後の Image オブジェクトをファイルに保存します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string path, ImageCodecInfo codec, EncoderParameters parameters)
         {
             using (var stream = IoEx.File.Create(path))
             {
-                Resized.Save(stream, Original.RawFormat);
+                Resized.Save(stream, codec, parameters);
             }
         }
 
         #endregion
 
         #region Others
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Initialize
+        ///
+        /// <summary>
+        /// 初期化処理を実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Initialize()
+        {
+            _width  = Original.Width;
+            _height = Original.Height;
+            _ratio  = _height / (double)_width;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
