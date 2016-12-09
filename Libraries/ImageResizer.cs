@@ -19,6 +19,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Drawing;
+using IoEx = Alphaleonis.Win32.Filesystem;
 
 namespace Cube.Images
 {
@@ -253,7 +254,13 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path) => Resized.Save(path);
+        public void Save(string path)
+        {
+            using (var stream = IoEx.File.Create(path))
+            {
+                Resized.Save(stream, Original.RawFormat);
+            }
+        }
 
         #endregion
 
