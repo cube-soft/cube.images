@@ -102,9 +102,7 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         private ImageResizer Create(string filename = "lena.png")
-            => new ImageResizer(
-            Image.FromFile(IoEx.Path.Combine(Examples, "lena.png")
-        ));
+            => new ImageResizer(IoEx.Path.Combine(Examples, filename));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -115,7 +113,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string CreateFilePath(ImageResizer resizer, string prefix)
+        private string CreateFilePath(ImageResizer resizer, string prefix, string extension = ".png")
         {
             var items = new List<string>();
 
@@ -127,7 +125,7 @@ namespace Cube.Images.Tests
             if (resizer.PreserveAspectRatio) items.Add("preserve");
             if (resizer.ShrinkOnly) items.Add("shrink");
 
-            return IoEx.Path.Combine(Results, $"{string.Join("-", items)}.png");
+            return IoEx.Path.Combine(Results, $"{string.Join("-", items)}{extension}");
         }
 
         #endregion
