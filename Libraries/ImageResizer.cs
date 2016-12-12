@@ -183,6 +183,56 @@ namespace Cube.Images
 
         /* ----------------------------------------------------------------- */
         ///
+        /// LongSide
+        ///
+        /// <summary>
+        /// 長辺の長さを取得または指定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 長辺がどちらに当たるかは、Original のサイズを基に判別します。
+        /// また、PreserveAspectRatio が true に設定されている場合、短辺の長さも
+        /// 自動的に変更されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int LongSide
+        {
+            get { return Original.Width < Original.Height ? Height : Width; }
+            set
+            {
+                if (Original.Width < Original.Height) Height = value;
+                else Width = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShortSide
+        ///
+        /// <summary>
+        /// 短辺の長さを取得または指定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 短辺がどちらに当たるかは、Original のサイズを基に判別します。
+        /// また、PreserveAspectRatio が true に設定されている場合、長辺の長さも
+        /// 自動的に変更されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ShortSide
+        {
+            get { return Original.Width < Original.Height ? Width : Height; }
+            set
+            {
+                if (Original.Width < Original.Height) Width = value;
+                else Height = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ResizeMode
         ///
         /// <summary>
@@ -235,46 +285,6 @@ namespace Cube.Images
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetLongSide
-        ///
-        /// <summary>
-        /// 長辺の長さを指定します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// PreserveAspectRatio が true に設定されている場合、短辺の長さも
-        /// 自動的に変更されます。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetLongSide(int value)
-        {
-            if (Original.Width < Original.Height) Height = value;
-            else Width = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetShortSide
-        ///
-        /// <summary>
-        /// 短辺の長さを指定します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// PreserveAspectRatio が true に設定されている場合、長辺の長さも
-        /// 自動的に変更されます。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetShortSide(int value)
-        {
-            if (Original.Width < Original.Height) Width = value;
-            else Height = value;
-        }
 
         /* ----------------------------------------------------------------- */
         ///
