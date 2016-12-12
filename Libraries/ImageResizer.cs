@@ -34,7 +34,7 @@ namespace Cube.Images
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ImageResizer
+    public class ImageResizer : IDisposable
     {
         #region Constructors
 
@@ -284,6 +284,62 @@ namespace Cube.Images
 
         #endregion
 
+        #region IDisposable Support
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ImageResizer
+        ///
+        /// <summary>
+        /// デストラクタを実行します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// アンマネージリソースが存在する場合のみ、デストラクタを有効にします。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        //~ImageResizer() { Dispose(false); }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースオブジェクトを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースオブジェクトを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Original?.Dispose();
+                    Resized?.Dispose();
+                }
+                _disposed = true;
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -485,9 +541,10 @@ namespace Cube.Images
         #endregion
 
         #region Fields
-        private int _width;
-        private int _height;
-        private double _ratio; // 幅を基準とした縦横比
+        private bool _disposed = false;
+        private int _width = 0;
+        private int _height = 0;
+        private double _ratio = 1.0; // 幅を基準とした縦横比
         private Image _resized;
         #endregion
     }
