@@ -53,14 +53,15 @@ namespace Cube.Images.Tests
         [TestCase(1024,  true,  true, ExpectedResult =  512)]
         public int Resized_Height(int width, bool preserve, bool shrink)
         {
-            var resizer = Create();
+            using (var resizer = Create())
+            {
+                resizer.PreserveAspectRatio = preserve;
+                resizer.ShrinkOnly = shrink;
+                resizer.Width = width;
+                resizer.Save(CreateFilePath(resizer, "resized"));
 
-            resizer.PreserveAspectRatio = preserve;
-            resizer.ShrinkOnly = shrink;
-            resizer.Width = width;
-            resizer.Save(CreateFilePath(resizer, "resized"));
-
-            return resizer.Resized.Height;
+                return resizer.Resized.Height;
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -77,14 +78,16 @@ namespace Cube.Images.Tests
         [TestCase(ImageResizeMode.HighSpeed,   256)]
         public void ResizeMode(ImageResizeMode mode, int width)
         {
-            var resizer = Create();
-            resizer.ResizeMode = mode;
-            resizer.Width = width;
+            using (var resizer = Create())
+            {
+                resizer.ResizeMode = mode;
+                resizer.Width = width;
 
-            var dest = CreateFilePath(resizer, "mode");
-            resizer.Save(dest);
+                var dest = CreateFilePath(resizer, "mode");
+                resizer.Save(dest);
 
-            Assert.That(IoEx.File.Exists(dest));
+                Assert.That(IoEx.File.Exists(dest));
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -102,11 +105,10 @@ namespace Cube.Images.Tests
         public long Save_Stream(int width)
         {
             using (var dest = new System.IO.MemoryStream())
+            using (var resizer = Create())
             {
-                var resizer = Create();
                 resizer.Width = width;
                 resizer.Save(dest);
-
                 return dest.Length;
             }
         }
@@ -126,13 +128,15 @@ namespace Cube.Images.Tests
         [TestCase(100, 256)]
         public void Save_File_Jpeg(long quality, int width)
         {
-            var resizer = Create();
-            resizer.Width = width;
+            using (var resizer = Create())
+            {
+                resizer.Width = width;
 
-            var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
-            resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
+                var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
+                resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
 
-            Assert.That(IoEx.File.Exists(dest));
+                Assert.That(IoEx.File.Exists(dest));
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -147,14 +151,16 @@ namespace Cube.Images.Tests
         [Test]
         public void Overwrite()
         {
-            var resizer = Create();
-            resizer.Width = 128;
+            using (var resizer = Create())
+            {
+                resizer.Width = 128;
 
-            var dest = CreateFilePath(resizer, "overwrite");
-            resizer.Save(dest);
-            resizer.Save(dest); // overwrite
+                var dest = CreateFilePath(resizer, "overwrite");
+                resizer.Save(dest);
+                resizer.Save(dest); // overwrite
 
-            Assert.That(IoEx.File.Exists(dest));
+                Assert.That(IoEx.File.Exists(dest));
+            }
         }
 
         #endregion
