@@ -194,7 +194,7 @@ namespace Cube.Images.Tests
             if (resizer.PreserveAspectRatio) items.Add("preserve");
             if (resizer.ShrinkOnly) items.Add("shrink");
 
-            return IoEx.Path.Combine(Results, $"{string.Join("-", items)}{extension}");
+            return IoEx.Path.Combine(Results, $"{string.Join("-", items.ToArray())}{extension}");
         }
 
         #endregion
