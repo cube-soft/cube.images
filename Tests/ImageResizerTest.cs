@@ -89,10 +89,34 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save_Jpeg
+        /// Save_Stream
         ///
         /// <summary>
-        /// JPEG 形式で保存するテストを実行します。
+        /// Stream に書き出すテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(512, ExpectedResult = 801429L)]
+        [TestCase(256, ExpectedResult = 197752L)]
+        [TestCase(128, ExpectedResult =  50330L)]
+        public long Save_Stream(int width)
+        {
+            using (var dest = new System.IO.MemoryStream())
+            {
+                var resizer = Create();
+                resizer.Width = width;
+                resizer.Save(dest);
+
+                return dest.Length;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save_File_Jpeg
+        ///
+        /// <summary>
+        /// JPEG 形式でファイルに保存するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -100,13 +124,35 @@ namespace Cube.Images.Tests
         [TestCase( 50, 256)]
         [TestCase( 75, 256)]
         [TestCase(100, 256)]
-        public void Save_Jpeg(long quality, int width)
+        public void Save_File_Jpeg(long quality, int width)
         {
             var resizer = Create();
             resizer.Width = width;
 
             var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
             resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
+
+            Assert.That(IoEx.File.Exists(dest));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Overwrite
+        ///
+        /// <summary>
+        /// 上書きのテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Overwrite()
+        {
+            var resizer = Create();
+            resizer.Width = 128;
+
+            var dest = CreateFilePath(resizer, "overwrite");
+            resizer.Save(dest);
+            resizer.Save(dest); // overwrite
 
             Assert.That(IoEx.File.Exists(dest));
         }
