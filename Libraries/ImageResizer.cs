@@ -49,10 +49,10 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public ImageResizer(string original)
         {
-            using (var stream = IoEx.File.Open(original, System.IO.FileMode.Open))
+            var mode = System.IO.FileMode.Open;
+            var access = System.IO.FileAccess.Read;
+            using (var stream = IoEx.File.Open(original, mode, access))
             {
-                var image = Image.FromStream(stream);
-                if (image == null || image.Width < 1 || image.Height < 1) throw new ArgumentException();
                 Original = Image.FromStream(stream);
             }
             Initialize();
@@ -89,7 +89,6 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public ImageResizer(Image original)
         {
-            if (original == null || original.Width < 1 || original.Height < 1) throw new ArgumentException();
             Original = original;
             Initialize();
         }
@@ -332,7 +331,7 @@ namespace Cube.Images
                 if (disposing)
                 {
                     Original?.Dispose();
-                    Resized?.Dispose();
+                    _resized?.Dispose();
                 }
                 _disposed = true;
             }
@@ -461,6 +460,11 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private void Initialize()
         {
+            if (Original == null || Original.Width < 1 || Original.Height < 1)
+            {
+                throw new ArgumentException("original");
+            }
+
             _width  = Original.Width;
             _height = Original.Height;
             _ratio  = _height / (double)_width;
