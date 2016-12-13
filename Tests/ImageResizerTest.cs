@@ -73,19 +73,20 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("lena.png", 600, ExpectedResult = 801416L)]
-        [TestCase("lena.jpg", 600, ExpectedResult = 801416L)]
+        [TestCase("lena.png", 600, ExpectedResult = 801429L)]
+        [TestCase("lena.jpg", 600, ExpectedResult =  37817L)]
         [TestCase("lena.png", 512, ExpectedResult = 801429L)]
         [TestCase("lena.jpg", 512, ExpectedResult =  37817L)]
-        [TestCase("lena.png", 256, ExpectedResult = 197752L)]
-        [TestCase("lena.jpg", 256, ExpectedResult =  12165L)]
-        [TestCase("lena.png", 128, ExpectedResult =  50330L)]
-        [TestCase("lena.jpg", 128, ExpectedResult =   4420L)]
+        [TestCase("lena.png", 256, ExpectedResult = 197792L)]
+        [TestCase("lena.jpg", 256, ExpectedResult =  12540L)]
+        [TestCase("lena.png", 128, ExpectedResult =  50941L)]
+        [TestCase("lena.jpg", 128, ExpectedResult =   4690L)]
         public long Save_Stream(string filename, int width)
         {
             using (var dest = new System.IO.MemoryStream())
             using (var resizer = Create(filename))
             {
+                resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.PreserveAspectRatio = true;
                 resizer.ShrinkOnly = true;
                 resizer.Width = width;
@@ -103,21 +104,19 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase( 25, 256)]
-        [TestCase( 50, 256)]
-        [TestCase( 75, 256)]
-        [TestCase(100, 256)]
-        public void Save_File_Jpeg(long quality, int width)
+        [TestCase(100, 256, ExpectedResult = 59309L)]
+        [TestCase( 75, 256, ExpectedResult = 12389L)]
+        [TestCase( 50, 256, ExpectedResult =  8548L)]
+        [TestCase( 25, 256, ExpectedResult =  5763L)]
+        public long Save_Stream_Jpeg(long quality, int width)
         {
+            using (var dest = new System.IO.MemoryStream())
             using (var resizer = Create())
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = width;
-
-                var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
                 resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
-
-                Assert.That(IoEx.File.Exists(dest));
+                return dest.Length;
             }
         }
 
