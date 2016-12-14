@@ -481,14 +481,16 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private Image Resize()
         {
-            var grow = (Width > Original.Width || Height > Original.Height);
-            if (ShrinkOnly && grow) return Original.Clone() as Image;
+            var grow   = (Width > Original.Width || Height > Original.Height);
+            var clone  = (ShrinkOnly && grow);
+            var width  = clone ? Original.Width : Width;
+            var height = clone ? Original.Height : Height;
+            var dest   = new Bitmap(width, height, Original.PixelFormat);
 
-            var dest = new Bitmap(Width, Height, Original.PixelFormat);
             using (var gs = Graphics.FromImage(dest))
             {
                 SetResizeMode(gs);
-                gs.DrawImage(Original, 0, 0, Width, Height);
+                gs.DrawImage(Original, 0, 0, width, height);
             }
             return dest;
         }

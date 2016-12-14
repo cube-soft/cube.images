@@ -66,32 +66,6 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ResizeMode
-        ///
-        /// <summary>
-        /// ResizeMode のテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase(ImageResizeMode.Default,     256)]
-        [TestCase(ImageResizeMode.HighQuality, 256)]
-        [TestCase(ImageResizeMode.HighSpeed,   256)]
-        public void ResizeMode(ImageResizeMode mode, int width)
-        {
-            using (var resizer = Create())
-            {
-                resizer.ResizeMode = mode;
-                resizer.Width = width;
-
-                var dest = CreateFilePath(resizer, "mode");
-                resizer.Save(dest);
-
-                Assert.That(IoEx.File.Exists(dest));
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Save_Stream
         ///
         /// <summary>
@@ -99,14 +73,22 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(512, ExpectedResult = 801429L)]
-        [TestCase(256, ExpectedResult = 197752L)]
-        [TestCase(128, ExpectedResult =  50330L)]
-        public long Save_Stream(int width)
+        [TestCase("lena.png", 600, ExpectedResult = 801429L)]
+        [TestCase("lena.jpg", 600, ExpectedResult =  37817L)]
+        [TestCase("lena.png", 512, ExpectedResult = 801429L)]
+        [TestCase("lena.jpg", 512, ExpectedResult =  37817L)]
+        [TestCase("lena.png", 256, ExpectedResult = 197792L)]
+        [TestCase("lena.jpg", 256, ExpectedResult =  12540L)]
+        [TestCase("lena.png", 128, ExpectedResult =  50941L)]
+        [TestCase("lena.jpg", 128, ExpectedResult =   4690L)]
+        public long Save_Stream(string filename, int width)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var resizer = Create())
+            using (var resizer = Create(filename))
             {
+                resizer.ResizeMode = ImageResizeMode.HighQuality;
+                resizer.PreserveAspectRatio = true;
+                resizer.ShrinkOnly = true;
                 resizer.Width = width;
                 resizer.Save(dest);
                 return dest.Length;
@@ -122,18 +104,43 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase( 25, 256)]
-        [TestCase( 50, 256)]
-        [TestCase( 75, 256)]
-        [TestCase(100, 256)]
-        public void Save_File_Jpeg(long quality, int width)
+        [TestCase(100, 256, ExpectedResult = 59309L)]
+        [TestCase( 75, 256, ExpectedResult = 12389L)]
+        [TestCase( 50, 256, ExpectedResult =  8548L)]
+        [TestCase( 25, 256, ExpectedResult =  5763L)]
+        public long Save_Stream_Jpeg(long quality, int width)
+        {
+            using (var dest = new System.IO.MemoryStream())
+            using (var resizer = Create())
+            {
+                resizer.ResizeMode = ImageResizeMode.HighQuality;
+                resizer.Width = width;
+                resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
+                return dest.Length;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save_ResizeMode
+        ///
+        /// <summary>
+        /// ResizeMode を変更して保存するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(ImageResizeMode.Default)]
+        [TestCase(ImageResizeMode.HighQuality)]
+        [TestCase(ImageResizeMode.HighSpeed)]
+        public void Save_ResizeMode(ImageResizeMode mode)
         {
             using (var resizer = Create())
             {
-                resizer.Width = width;
+                resizer.ResizeMode = mode;
+                resizer.Width = 256;
 
-                var dest = CreateFilePath(resizer, $"quality{quality}", ".jpg");
-                resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
+                var dest = CreateFilePath(resizer, "mode");
+                resizer.Save(dest);
 
                 Assert.That(IoEx.File.Exists(dest));
             }
@@ -148,10 +155,11 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Overwrite()
+        [TestCase("lena.png")]
+        [TestCase("lena.jpg")]
+        public void Overwrite(string filename)
         {
-            using (var resizer = Create())
+            using (var resizer = Create(filename))
             {
                 resizer.Width = 128;
 
