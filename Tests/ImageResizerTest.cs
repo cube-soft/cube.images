@@ -40,7 +40,7 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Resized_Heigh
+        /// Resized_Height
         ///
         /// <summary>
         /// Width を設定してリサイズ処理を実行するテストです。
@@ -53,12 +53,12 @@ namespace Cube.Images.Tests
         [TestCase(1024,  true,  true, ExpectedResult =  512)]
         public int Resized_Height(int width, bool preserve, bool shrink)
         {
-            using (var resizer = Create())
+            using (var resizer = Create("lena.png"))
             {
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
-                resizer.Save(CreateFilePath(resizer, "resized"));
+                resizer.Save(CreateFilePath(resizer, "resized", ".png"));
 
                 return resizer.Resized.Height;
             }
@@ -100,7 +100,7 @@ namespace Cube.Images.Tests
         /// Save_File_Jpeg
         ///
         /// <summary>
-        /// JPEG 形式でファイルに保存するテストを実行します。
+        /// JPEG 形式で Stream に書き出すテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -110,8 +110,9 @@ namespace Cube.Images.Tests
         [TestCase( 25, 256, ExpectedResult =  5763L)]
         public long Save_Stream_Jpeg(long quality, int width)
         {
+            var filename = "lena.png";
             using (var dest = new System.IO.MemoryStream())
-            using (var resizer = Create())
+            using (var resizer = Create(filename))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = width;
@@ -134,12 +135,14 @@ namespace Cube.Images.Tests
         [TestCase(ImageResizeMode.HighSpeed)]
         public void Save_ResizeMode(ImageResizeMode mode)
         {
-            using (var resizer = Create())
+            var filename = "lena.png";
+            using (var resizer = Create(filename))
             {
                 resizer.ResizeMode = mode;
                 resizer.Width = 256;
 
-                var dest = CreateFilePath(resizer, "mode");
+                var ext  = IoEx.Path.GetExtension(filename);
+                var dest = CreateFilePath(resizer, "mode", ext);
                 resizer.Save(dest);
 
                 Assert.That(IoEx.File.Exists(dest));
@@ -163,7 +166,8 @@ namespace Cube.Images.Tests
             {
                 resizer.Width = 128;
 
-                var dest = CreateFilePath(resizer, "overwrite");
+                var ext  = IoEx.Path.GetExtension(filename);
+                var dest = CreateFilePath(resizer, "overwrite", ext);
                 resizer.Save(dest);
                 resizer.Save(dest); // overwrite
 
@@ -184,7 +188,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ImageResizer Create(string filename = "lena.png")
+        private ImageResizer Create(string filename)
             => new ImageResizer(IoEx.Path.Combine(Examples, filename));
 
         /* ----------------------------------------------------------------- */
@@ -196,7 +200,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string CreateFilePath(ImageResizer resizer, string prefix, string extension = ".png")
+        private string CreateFilePath(ImageResizer resizer, string prefix, string extension)
         {
             var items = new List<string>();
 
