@@ -21,6 +21,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Cube.Images.BuiltIn;
 using IoEx = Alphaleonis.Win32.Filesystem;
 
 namespace Cube.Images
@@ -49,13 +50,13 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public ImageResizer(string original)
         {
-            var mode = System.IO.FileMode.Open;
+            var mode   = System.IO.FileMode.Open;
             var access = System.IO.FileAccess.Read;
             using (var stream = IoEx.File.Open(original, mode, access))
             {
                 Original = Image.FromStream(stream);
             }
-            Initialize();
+            Setup();
         }
 
         /* ----------------------------------------------------------------- */
@@ -70,7 +71,7 @@ namespace Cube.Images
         public ImageResizer(System.IO.Stream original)
         {
             Original = Image.FromStream(original);
-            Initialize();
+            Setup();
         }
 
         /* ----------------------------------------------------------------- */
@@ -90,7 +91,7 @@ namespace Cube.Images
         public ImageResizer(Image original)
         {
             Original = original;
-            Initialize();
+            Setup();
         }
 
         #endregion
@@ -281,6 +282,17 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public double AspectRatio => _ratio > 1.0 ? _ratio : 1 / _ratio;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ColorDepth
+        ///
+        /// <summary>
+        /// オリジナル画像のビット深度を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ColorDepth => Original.GetColorDepth();
+
         #endregion
 
         #region IDisposable Support
@@ -330,8 +342,8 @@ namespace Cube.Images
             {
                 if (disposing)
                 {
+                    DisposeImage();
                     Original?.Dispose();
-                    _resized?.Dispose();
                 }
                 _disposed = true;
             }
@@ -451,14 +463,14 @@ namespace Cube.Images
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Initialize
+        /// Setup
         ///
         /// <summary>
         /// 初期化処理を実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Initialize()
+        private void Setup()
         {
             if (Original == null || Original.Width < 1 || Original.Height < 1)
             {
@@ -481,16 +493,14 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private Image Resize()
         {
-            var grow   = (Width > Original.Width || Height > Original.Height);
-            var clone  = (ShrinkOnly && grow);
-            var width  = clone ? Original.Width : Width;
-            var height = clone ? Original.Height : Height;
-            var dest   = new Bitmap(width, height, Original.PixelFormat);
+            var grow = (Width > Original.Width || Height > Original.Height);
+            if (ShrinkOnly && grow) return new Bitmap(Original);
 
+            var dest = new Bitmap(Width, Height, Original.GetRgbFormat());
             using (var gs = Graphics.FromImage(dest))
             {
                 SetResizeMode(gs);
-                gs.DrawImage(Original, 0, 0, width, height);
+                gs.DrawImage(Original, 0, 0, Width, Height);
             }
             return dest;
         }
