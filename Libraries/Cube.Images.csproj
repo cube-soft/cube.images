@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ImageFormat.cs" />
     <Compile Include="ImageResizer.cs" />
+    <Compile Include="Operations\BuiltIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
