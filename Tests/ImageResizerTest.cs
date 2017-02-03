@@ -32,7 +32,6 @@ namespace Cube.Images.Tests
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class ImageResizerTest : FileResource
     {
@@ -53,12 +52,14 @@ namespace Cube.Images.Tests
         [TestCase(1024,  true,  true, ExpectedResult =  512)]
         public int Resized_Height(int width, bool preserve, bool shrink)
         {
-            using (var resizer = Create("lena.png"))
+            var filename = "lena.png";
+            using (var resizer = Create(filename))
             {
+                var ext = IoEx.Path.GetExtension(filename);
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
-                resizer.Save(CreateFilePath(resizer, "resized", ".png"));
+                resizer.Save(CreateFilePath(resizer, "resized", ext));
 
                 return resizer.Resized.Height;
             }
@@ -73,14 +74,14 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("lena.png", 600, ExpectedResult = 801429L)]
-        [TestCase("lena.jpg", 600, ExpectedResult =  37817L)]
-        [TestCase("lena.png", 512, ExpectedResult = 801429L)]
-        [TestCase("lena.jpg", 512, ExpectedResult =  37817L)]
-        [TestCase("lena.png", 256, ExpectedResult = 197792L)]
-        [TestCase("lena.jpg", 256, ExpectedResult =  12540L)]
-        [TestCase("lena.png", 128, ExpectedResult =  50941L)]
-        [TestCase("lena.jpg", 128, ExpectedResult =   4690L)]
+        [TestCase("lena.png",       600, ExpectedResult = 801429L)]
+        [TestCase("lena-24bpp.jpg", 600, ExpectedResult =  37817L)]
+        [TestCase("lena.png",       512, ExpectedResult = 801429L)]
+        [TestCase("lena-24bpp.jpg", 512, ExpectedResult =  37817L)]
+        [TestCase("lena.png",       256, ExpectedResult = 197792L)]
+        [TestCase("lena-24bpp.jpg", 256, ExpectedResult =  12540L)]
+        [TestCase("lena.png",       128, ExpectedResult =  50941L)]
+        [TestCase("lena-24bpp.jpg", 128, ExpectedResult =   4690L)]
         public long Save_Stream(string filename, int width)
         {
             using (var dest = new System.IO.MemoryStream())
@@ -159,7 +160,7 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCase("lena.png")]
-        [TestCase("lena.jpg")]
+        [TestCase("lena-24bpp.jpg")]
         public void Overwrite(string filename)
         {
             using (var resizer = Create(filename))
