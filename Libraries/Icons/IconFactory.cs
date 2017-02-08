@@ -138,7 +138,7 @@ namespace Cube.Images.Icons
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon GetIcon(StockIcons si, IconSize size)
+        public static Icon GetIcon(this StockIcons si, IconSize size)
             => Create(si, size);
 
         /* ----------------------------------------------------------------- */
@@ -150,7 +150,7 @@ namespace Cube.Images.Icons
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon GetIcon(System.IO.FileInfo fi, IconSize size)
+        public static Icon GetIcon(this System.IO.FileInfo fi, IconSize size)
             => Create(fi?.FullName, size);
 
         #endregion
