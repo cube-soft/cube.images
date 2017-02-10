@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libraries\Cube.Images.csproj">
+      <Project>{93009dc4-969e-4354-9b32-770b84817ccc}</Project>
+      <Name>Cube.Images</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="AlphaFS">
       <HintPath>..\..\packages\AlphaFS.2.1.2\lib\net45\AlphaFS.dll</HintPath>
       <Private>True</Private>
@@ -45,12 +51,12 @@
     <Reference Include="Cube.Core">
       <HintPath>..\..\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileResource.cs" />
@@ -61,12 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Libraries\Cube.Images.csproj">
-      <Project>{93009dc4-969e-4354-9b32-770b84817ccc}</Project>
-      <Name>Cube.Images</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
