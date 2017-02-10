@@ -35,13 +35,27 @@
       <HintPath>..\..\packages\AlphaFS.2.1.2\lib\net35\AlphaFS.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Cube.Core">
+      <HintPath>..\..\lib\net35\Cube.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Icons\IconFactory.cs" />
+    <Compile Include="Icons\IconSize.cs" />
+    <Compile Include="Icons\StockIcons.cs" />
+    <Compile Include="NativeMethods\Structures\IImageList.cs" />
+    <Compile Include="NativeMethods\Structures\ImageInfo.cs" />
+    <Compile Include="NativeMethods\Structures\Point.cs" />
+    <Compile Include="NativeMethods\Structures\Rect.cs" />
+    <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
+    <Compile Include="NativeMethods\Structures\SHStockIconInfo.cs" />
+    <Compile Include="NativeMethods\Shell32.cs" />
     <Compile Include="Operations\BuiltIn.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="ImageResizer.cs" />
