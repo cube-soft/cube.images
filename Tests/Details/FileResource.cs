@@ -15,8 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.IO;
 using System.Reflection;
-using IoEx = System.IO;
 
 namespace Cube.Images.Tests
 {
@@ -45,9 +45,10 @@ namespace Cube.Images.Tests
         protected FileResource()
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
-            Root = IoEx.Path.GetDirectoryName(reader.Location);
+            Root = Path.GetDirectoryName(reader.Location);
             _folder = GetType().FullName.Replace($"{reader.Product}.", "");
-            Initialize();
+            if (!Directory.Exists(Results)) Directory.CreateDirectory(Results);
+            Clean(Results);
         }
 
         #endregion
@@ -75,7 +76,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Examples => IoEx.Path.Combine(Root, "Examples");
+        protected string Examples => Path.Combine(Root, "Examples");
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,26 +87,47 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Results => IoEx.Path.Combine(Root, $@"Results\{_folder}");
+        protected string Results => Path.Combine(Root, $@"Results\{_folder}");
 
         #endregion
 
-        #region Other private methods
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Initialize
+        /// Example
         /// 
         /// <summary>
-        /// リソースファイルを初期化します。
+        /// ファイル名に対して Examples フォルダのパスを結合したパスを
+        /// 取得します。
         /// </summary>
+        /// 
+        /// <param name="filename">ファイル名</param>
+        /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        private void Initialize()
-        {
-            if (!IoEx.Directory.Exists(Results)) IoEx.Directory.CreateDirectory(Results);
-            Clean(Results);
-        }
+        protected string Example(string filename)
+            => Path.Combine(Examples, filename);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Example
+        /// 
+        /// <summary>
+        /// ファイル名に対して Results フォルダのパスを結合したパスを
+        /// 取得します。
+        /// </summary>
+        /// 
+        /// <param name="filename">ファイル名</param>
+        /// <returns>パス</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected string Result(string filename)
+            => Path.Combine(Results, filename);
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -118,22 +140,23 @@ namespace Cube.Images.Tests
         /* ----------------------------------------------------------------- */
         private void Clean(string folder)
         {
-            foreach (string file in IoEx.Directory.GetFiles(folder))
+            foreach (string file in Directory.GetFiles(folder))
             {
-                IoEx.File.SetAttributes(file, IoEx.FileAttributes.Normal);
-                IoEx.File.Delete(file);
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
             }
 
-            foreach (string sub in IoEx.Directory.GetDirectories(folder))
+            foreach (string sub in Directory.GetDirectories(folder))
             {
                 Clean(sub);
+                Directory.Delete(sub);
             }
         }
 
-        #endregion
-
         #region Fields
         private string _folder = string.Empty;
+        #endregion
+
         #endregion
     }
 }
