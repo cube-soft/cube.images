@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using NUnit.Framework;
-using IoEx = Alphaleonis.Win32.Filesystem;
+using IoEx = System.IO;
 
 namespace Cube.Images.Tests
 {

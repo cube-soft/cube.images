@@ -19,7 +19,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Cube.Images.BuiltIn;
 using NUnit.Framework;
-using IoEx = Alphaleonis.Win32.Filesystem;
+using IoEx = System.IO;
 
 namespace Cube.Images.Tests
 {

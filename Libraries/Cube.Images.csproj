@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlphaFS">
-      <HintPath>..\..\packages\AlphaFS.2.1.2\lib\net35\AlphaFS.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Cube.Core">
       <HintPath>..\..\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
@@ -60,9 +56,6 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="ImageResizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
