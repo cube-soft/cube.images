@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using Cube.Images.BuiltIn;
-using IoEx = Alphaleonis.Win32.Filesystem;
+using IoEx = System.IO;
 
 namespace Cube.Images
 {
