@@ -1,0 +1,33 @@
+# --------------------------------------------------------------------------- #
+# general configuration
+# --------------------------------------------------------------------------- #
+version: 1.4.0.{build}
+branches:
+  except:
+    - net35
+skip_tags: true
+
+# --------------------------------------------------------------------------- #
+# build configuration
+# --------------------------------------------------------------------------- #
+clone_folder: c:\cube\cube.images
+image: Visual Studio 2017
+platform: Any CPU
+configuration: Release
+before_build:
+    - nuget restore Cube.Images.sln
+build: 
+  parallel: true
+  project: Cube.Images.sln
+  publish_nuget: true
+  verbosity: normal
+
+# --------------------------------------------------------------------------- #
+# tests configuration
+# --------------------------------------------------------------------------- #
+after_test:
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.Images.Tests.dll" -targetdir:".\Tests\bin\Release" -hideskipped:All -output:CoverResult.xml
+    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+    - pip install codecov
+    - codecov -f "CoverResult.xml" -t fa819494-c962-4b4b-8868-17d9ae00c23e
+    
