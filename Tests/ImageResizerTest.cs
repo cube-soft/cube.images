@@ -72,15 +72,15 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("lena.png",       600, ExpectedResult = 801429L)]
-        [TestCase("lena-24bpp.jpg", 600, ExpectedResult =  37817L)]
-        [TestCase("lena.png",       512, ExpectedResult = 801429L)]
-        [TestCase("lena-24bpp.jpg", 512, ExpectedResult =  37817L)]
-        [TestCase("lena.png",       256, ExpectedResult = 197792L)]
-        [TestCase("lena-24bpp.jpg", 256, ExpectedResult =  12540L)]
-        [TestCase("lena.png",       128, ExpectedResult =  50941L)]
-        [TestCase("lena-24bpp.jpg", 128, ExpectedResult =   4690L)]
-        public long Save_Stream(string filename, int width)
+        [TestCase("lena.png",       600, 801429L)]
+        [TestCase("lena-24bpp.jpg", 600,  37817L)]
+        [TestCase("lena.png",       512, 801429L)]
+        [TestCase("lena-24bpp.jpg", 512,  37817L)]
+        [TestCase("lena.png",       256, 197792L)]
+        [TestCase("lena-24bpp.jpg", 256,  12540L)]
+        [TestCase("lena.png",       128,  50941L)]
+        [TestCase("lena-24bpp.jpg", 128,   4690L)]
+        public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
             using (var resizer = Create(filename))
@@ -90,7 +90,7 @@ namespace Cube.Images.Tests
                 resizer.ShrinkOnly = true;
                 resizer.Width = width;
                 resizer.Save(dest);
-                return dest.Length;
+                Assert.That(dest.Length, Is.AtLeast(expected));
             }
         }
 
@@ -103,11 +103,11 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(100, 256, ExpectedResult = 59309L)]
-        [TestCase( 75, 256, ExpectedResult = 12389L)]
-        [TestCase( 50, 256, ExpectedResult =  8548L)]
-        [TestCase( 25, 256, ExpectedResult =  5763L)]
-        public long Save_Stream_Jpeg(long quality, int width)
+        [TestCase(100, 256, 59309L)]
+        [TestCase( 75, 256, 12389L)]
+        [TestCase( 50, 256,  8548L)]
+        [TestCase( 25, 256,  5763L)]
+        public void Save_Stream_Jpeg(long quality, int width, long expected)
         {
             var filename = "lena.png";
             using (var dest = new System.IO.MemoryStream())
@@ -116,7 +116,7 @@ namespace Cube.Images.Tests
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = width;
                 resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
-                return dest.Length;
+                Assert.That(dest.Length, Is.AtLeast(expected));
             }
         }
 
