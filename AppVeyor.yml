@@ -13,7 +13,6 @@ skip_tags: true
 clone_folder: c:\cube\cube.images
 image: Visual Studio 2017
 nuget:
-  account_feed: true
   project_feed: true
   disable_publish_on_pr: true
 
@@ -23,6 +22,7 @@ nuget:
 platform: Any CPU
 configuration: Release
 before_build:
+    - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget restore Cube.Images.sln
 build: 
   parallel: true
