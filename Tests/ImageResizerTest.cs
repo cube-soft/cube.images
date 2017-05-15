@@ -78,7 +78,7 @@ namespace Cube.Images.Tests
         [TestCase("lena-24bpp.jpg", 512,  37817L)]
         [TestCase("lena.png",       256, 197792L)]
         [TestCase("lena-24bpp.jpg", 256,  12540L)]
-        [TestCase("lena.png",       128,  50941L)]
+        [TestCase("lena.png",       128,  50928L)]
         [TestCase("lena-24bpp.jpg", 128,   4690L)]
         public void Save_Stream(string filename, int width, long expected)
         {
