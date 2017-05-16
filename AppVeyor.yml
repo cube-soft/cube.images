@@ -33,9 +33,10 @@ build:
 # --------------------------------------------------------------------------- #
 # tests configuration
 # --------------------------------------------------------------------------- #
-after_test:
+test_script:
     - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.Images.Tests.dll" -targetdir:".\Tests\bin\Release" -hideskipped:All -output:CoverResult.xml
+after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
-    - codecov -f "CoverResult.xml" -t fa819494-c962-4b4b-8868-17d9ae00c23e
+    - codecov -f "CoverResult.xml"
     
