@@ -67,10 +67,7 @@ namespace Cube.Images
         /// 
         /* ----------------------------------------------------------------- */
         public ImageResizer(System.IO.Stream original)
-        {
-            Original = Image.FromStream(original);
-            Setup();
-        }
+            : this(Image.FromStream(original)) { }
 
         /* ----------------------------------------------------------------- */
         ///
