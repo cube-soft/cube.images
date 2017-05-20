@@ -71,6 +71,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
+        [Test]
         public void GetColorDepth_Null()
         {
             var image = default(Bitmap);
@@ -111,6 +112,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
+        [Test]
         public void GetRgbFormat_Null()
         {
             var image = default(Bitmap);
@@ -166,6 +168,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
+        [Test]
         public void IsFormat_Null()
         {
             var image = default(Bitmap);

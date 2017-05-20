@@ -207,10 +207,11 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
+        [Test]
         public void Create_Null_Throws()
             => Assert.That(() =>
             {
-                using (var resizer = new ImageResizer(default(Bitmap)))
+                using (var resizer = new ImageResizer(default(System.IO.Stream)))
                 {
                     Assert.Fail("never reached");
                 }
