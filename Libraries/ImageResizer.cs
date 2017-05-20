@@ -54,7 +54,7 @@ namespace Cube.Images
             {
                 Original = Image.FromStream(stream);
             }
-            Setup();
+            Initialize();
         }
 
         /* ----------------------------------------------------------------- */
@@ -86,7 +86,7 @@ namespace Cube.Images
         public ImageResizer(Image original)
         {
             Original = original;
-            Setup();
+            Initialize();
         }
 
         #endregion
@@ -290,7 +290,7 @@ namespace Cube.Images
 
         #endregion
 
-        #region IDisposable Support
+        #region IDisposable
 
         /* ----------------------------------------------------------------- */
         ///
@@ -301,7 +301,8 @@ namespace Cube.Images
         /// </summary>
         /// 
         /// <remarks>
-        /// アンマネージリソースが存在する場合のみ、デストラクタを有効にします。
+        /// アンマネージリソースが存在する場合のみデストラクタを有効に
+        /// します。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -338,7 +339,7 @@ namespace Cube.Images
                 if (disposing)
                 {
                     DisposeImage();
-                    Original?.Dispose();
+                    Original.Dispose();
                 }
                 _disposed = true;
             }
@@ -454,18 +455,18 @@ namespace Cube.Images
 
         #endregion
 
-        #region Others
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Setup
+        /// Initialize
         ///
         /// <summary>
         /// 初期化処理を実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Setup()
+        private void Initialize()
         {
             if (Original == null || Original.Width < 1 || Original.Height < 1)
             {
@@ -528,8 +529,6 @@ namespace Cube.Images
                     gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.Default;
                     gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.Default;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -549,14 +548,14 @@ namespace Cube.Images
             _resized = null;
         }
 
-        #endregion
-
         #region Fields
         private bool _disposed = false;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
         private Image _resized;
+        #endregion
+
         #endregion
     }
 
