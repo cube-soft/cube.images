@@ -38,8 +38,16 @@ namespace Cube.Images.BuiltIn
         /// IsFormat
         ///
         /// <summary>
-        /// Image オブジェクトが指定された ImageFormat かどうか判別します。
+        /// Image オブジェクトが指定されたイメージフォーマとかどうか
+        /// 判別します。
         /// </summary>
+        /// 
+        /// <param name="src">Image オブジェクト</param>
+        /// <param name="format">イメージフォーマット</param>
+        /// 
+        /// <returns>
+        /// 指定されたイメージフォーマットに合致するかどうかを示す値
+        /// </returns>
         ///
         /* ----------------------------------------------------------------- */
         public static bool IsFormat(this Image src, ImageFormat format)
@@ -52,6 +60,10 @@ namespace Cube.Images.BuiltIn
         /// <summary>
         /// インデックスカラーかどうかを判別します。
         /// </summary>
+        /// 
+        /// <param name="src">Image オブジェクト</param>
+        /// 
+        /// <returns>インデックスカラーかどうかを示す値</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static bool IsIndexedColor(this Image src)
@@ -71,6 +83,10 @@ namespace Cube.Images.BuiltIn
         /// Image オブジェクトのビット深度を取得します。
         /// </summary>
         /// 
+        /// <param name="src">Image オブジェクト</param>
+        /// 
+        /// <returns>ビット深度</returns>
+        /// 
         /* ----------------------------------------------------------------- */
         public static int GetColorDepth(this Image src)
             => Image.GetPixelFormatSize(src?.PixelFormat ?? PixelFormat.Undefined);
@@ -84,11 +100,12 @@ namespace Cube.Images.BuiltIn
         /// 取得します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// アルファチャンネルが必要な場合は 32bit ARGB、それ以外の場合は
-        /// 24bit RGB に対応する値が返されます。
-        /// </remarks>
-        ///
+        /// <param name="src">Image オブジェクト</param>
+        /// 
+        /// <returns>
+        /// RGB カラーで表現する場合の PixelFormat
+        /// </returns>
+        /// 
         /* ----------------------------------------------------------------- */
         public static PixelFormat GetRgbFormat(this Image src)
         {
@@ -106,20 +123,16 @@ namespace Cube.Images.BuiltIn
                 case PixelFormat.Format64bppArgb:
                 case PixelFormat.Format64bppPArgb:
                     return src.PixelFormat;
-                case PixelFormat.Format16bppGrayScale:
-                    return PixelFormat.Format24bppRgb;
-                case PixelFormat.Format16bppArgb1555:
-                    return PixelFormat.Format32bppArgb;
-                case PixelFormat.DontCare:
-                case PixelFormat.Extended:
-                case PixelFormat.Alpha:
-                case PixelFormat.PAlpha:
-                    return PixelFormat.Format32bppArgb;
-                case PixelFormat.Indexed:
-                case PixelFormat.Format1bppIndexed:
-                case PixelFormat.Format4bppIndexed:
-                case PixelFormat.Format8bppIndexed:
-                    return PixelFormat.Format32bppArgb;
+                // case PixelFormat.DontCare:
+                // case PixelFormat.Extended:
+                // case PixelFormat.Alpha:
+                // case PixelFormat.PAlpha:
+                // case PixelFormat.Indexed:
+                // case PixelFormat.Format1bppIndexed:
+                // case PixelFormat.Format4bppIndexed:
+                // case PixelFormat.Format8bppIndexed:
+                // case PixelFormat.Format16bppGrayScale:
+                // case PixelFormat.Format16bppArgb1555:
                 default:
                     return PixelFormat.Format32bppArgb;
             }
