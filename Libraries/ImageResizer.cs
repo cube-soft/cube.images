@@ -45,6 +45,10 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="original">
+        /// リサイズ対象となる画像ファイルのパス
+        /// </param>
+        /// 
         /* ----------------------------------------------------------------- */
         public ImageResizer(string original)
         {
@@ -65,6 +69,10 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="original">
+        /// リサイズ対象となる画像ファイルを読み込むストリーム
+        /// </param>
+        /// 
         /* ----------------------------------------------------------------- */
         public ImageResizer(System.IO.Stream original)
             : this(Image.FromStream(original)) { }
@@ -76,6 +84,8 @@ namespace Cube.Images
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <param name="original">リサイズ対象となる画像</param>
         /// 
         /// <remarks>
         /// 指定された Image オブジェクトが NULL の場合、または Image
@@ -356,6 +366,8 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path) => Save(path, Original.RawFormat);
@@ -367,6 +379,8 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
+        /// 
+        /// <param name="stream">書き込み用ストリーム</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(System.IO.Stream stream) => Save(stream, Original.RawFormat);
@@ -378,6 +392,9 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="format">保存する画像のフォーマット</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format)
@@ -392,6 +409,9 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
+        /// 
+        /// <param name="stream">書き出し用ストリーム</param>
+        /// <param name="format">保存する画像のフォーマット</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(System.IO.Stream stream, ImageFormat format)
@@ -404,41 +424,15 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="format">保存する画像のフォーマット</param>
+        /// <param name="parameters">付随するパラメータ</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format, EncoderParameters parameters)
-            => Save(path,
-            ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
-            parameters
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// リサイズ後の Image オブジェクトをストリームに書き出します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(System.IO.Stream stream, ImageFormat format, EncoderParameters parameters)
-            => Save(stream,
-            ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
-            parameters
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// リサイズ後の Image オブジェクトをファイルに保存します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string path, ImageCodecInfo codec, EncoderParameters parameters)
         {
-            using (var stream = IoEx.File.Create(path)) Save(stream, codec, parameters);
+            using (var stream = IoEx.File.Create(path)) Save(stream, format, parameters);
         }
 
         /* ----------------------------------------------------------------- */
@@ -449,9 +443,17 @@ namespace Cube.Images
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
         ///
+        /// <param name="stream">書き出し用ストリーム</param>
+        /// <param name="format">保存する画像のフォーマット</param>
+        /// <param name="parameters">付随するパラメータ</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public void Save(System.IO.Stream stream, ImageCodecInfo codec, EncoderParameters parameters)
-            => Resized.Save(stream, codec, parameters);
+        public void Save(System.IO.Stream stream, ImageFormat format, EncoderParameters parameters)
+            => Resized.Save(
+                stream,
+                ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
+                parameters
+            );
 
         #endregion
 
