@@ -39,29 +39,122 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Resized_Height
+        /// AspectRatio
+        ///
+        /// <summary>
+        /// 縦横比を取得するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase("lena.png",       1.000)]
+        [TestCase("portrait.png",   1.146)]
+        [TestCase("landscape.png",  3.813)]
+        public void AspectRatio(string filename, double expected)
+        {
+            using (var resizer = new ImageResizer(Example(filename)))
+            {
+                Assert.That(resizer.AspectRatio, Is.EqualTo(expected).Within(0.01));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resized_Width
         ///
         /// <summary>
         /// Width を設定してリサイズ処理を実行するテストです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase( 256,  true,  true, ExpectedResult =  256)]
-        [TestCase( 256, false,  true, ExpectedResult =  512)]
-        [TestCase(1024,  true, false, ExpectedResult = 1024)]
-        [TestCase(1024,  true,  true, ExpectedResult =  512)]
-        public int Resized_Height(int width, bool preserve, bool shrink)
+        [TestCase("lena.png",      256,  true,  true, ExpectedResult =  256)]
+        [TestCase("lena.png",      256, false,  true, ExpectedResult =  512)]
+        [TestCase("lena.png",     1024,  true, false, ExpectedResult = 1024)]
+        [TestCase("lena.png",     1024,  true,  true, ExpectedResult =  512)]
+        [TestCase("portrait.png",  128,  true,  true, ExpectedResult =  146)]
+        [TestCase("landscape.png", 128,  true,  true, ExpectedResult =   33)]
+        public int Resized_Width(string filename, int width, bool preserve, bool shrink)
         {
-            var filename = "lena.png";
             using (var resizer = new ImageResizer(Example(filename)))
             {
                 var ext = IoEx.Path.GetExtension(filename);
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
-                resizer.Save(SavePath(resizer, "resized", ext));
+                resizer.Save(SavePath(resizer, "wbase", ext));
 
                 return resizer.Resized.Height;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resized_Height
+        ///
+        /// <summary>
+        /// Height を設定してリサイズ処理を実行するテストです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase("lena.png",      128, ExpectedResult = 128)]
+        [TestCase("portrait.png",  128, ExpectedResult = 111)]
+        [TestCase("landscape.png",  32, ExpectedResult = 122)]
+        public int Resized_Height(string filename, int height)
+        {
+            using (var resizer = new ImageResizer(Example(filename)))
+            {
+                var ext = IoEx.Path.GetExtension(filename);
+                resizer.PreserveAspectRatio = true;
+                resizer.ShrinkOnly = true;
+                resizer.Height = height;
+                resizer.Save(SavePath(resizer, "hbase", ext));
+
+                return resizer.Resized.Width;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resized_LongSide
+        ///
+        /// <summary>
+        /// LongSide を設定してリサイズ処理を実行するテストです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(256, 256, 128, ExpectedResult = 128)]
+        [TestCase(128, 256, 128, ExpectedResult =  64)]
+        [TestCase( 16,  32, 128, ExpectedResult =  16)]
+        public int Resized_LongSide(int width, int height, int size)
+        {
+            using (var resizer = new ImageResizer(new Bitmap(width, height)))
+            {
+                resizer.PreserveAspectRatio = true;
+                resizer.ShrinkOnly = true;
+                resizer.LongSide = size;
+                return resizer.Resized.Width;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resized_ShortSide
+        ///
+        /// <summary>
+        /// ShortSide を設定してリサイズ処理を実行するテストです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(256, 256, 128, ExpectedResult = 128)]
+        [TestCase(512, 256, 128, ExpectedResult = 256)]
+        [TestCase(128,  64, 128, ExpectedResult = 128)]
+        public int Resized_ShortSide(int width, int height, int size)
+        {
+            using (var resizer = new ImageResizer(new Bitmap(width, height)))
+            {
+                resizer.PreserveAspectRatio = true;
+                resizer.ShrinkOnly = true;
+                resizer.ShortSide = size;
+                return resizer.Resized.Width;
             }
         }
 
@@ -85,7 +178,8 @@ namespace Cube.Images.Tests
         public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var resizer = new ImageResizer(Example(filename)))
+            using (var src = IoEx.File.Open(Example(filename), IoEx.FileMode.Open, IoEx.FileAccess.Read))
+            using (var resizer = new ImageResizer(src))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.PreserveAspectRatio = true;
