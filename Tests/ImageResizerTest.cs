@@ -39,26 +39,6 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AspectRatio
-        ///
-        /// <summary>
-        /// 縦横比を取得するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase("lena.png",       1.000)]
-        [TestCase("portrait.png",   1.146)]
-        [TestCase("landscape.png",  3.813)]
-        public void AspectRatio(string filename, double expected)
-        {
-            using (var resizer = new ImageResizer(Example(filename)))
-            {
-                Assert.That(resizer.AspectRatio, Is.EqualTo(expected).Within(0.01));
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Resized_Width
         ///
         /// <summary>
@@ -121,17 +101,22 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(256, 256, 128, ExpectedResult = 128)]
-        [TestCase(128, 256, 128, ExpectedResult =  64)]
-        [TestCase( 16,  32, 128, ExpectedResult =  16)]
-        public int Resized_LongSide(int width, int height, int size)
+        [TestCase(256, 256, 128, 128, 128)]
+        [TestCase(128, 256, 128,  64,  64)]
+        [TestCase( 16,  32, 128,  64,  16)]
+        [TestCase(192, 576, 128,  42,  42)]
+        [TestCase( 32,  96, 128,  42,  32)]
+        public void Resized_LongSide(int w, int h, int ls, int ss, int expected)
         {
-            using (var resizer = new ImageResizer(new Bitmap(width, height)))
+            using (var resizer = new ImageResizer(new Bitmap(w, h)))
             {
                 resizer.PreserveAspectRatio = true;
                 resizer.ShrinkOnly = true;
-                resizer.LongSide = size;
-                return resizer.Resized.Width;
+                resizer.LongSide = ls;
+
+                var img = resizer.Resized;
+                Assert.That(resizer.ShortSide, Is.EqualTo(ss));
+                Assert.That(Math.Min(img.Width, img.Height), Is.EqualTo(expected));
             }
         }
 
@@ -144,17 +129,22 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(256, 256, 128, ExpectedResult = 128)]
-        [TestCase(512, 256, 128, ExpectedResult = 256)]
-        [TestCase(128,  64, 128, ExpectedResult = 128)]
-        public int Resized_ShortSide(int width, int height, int size)
+        [TestCase(256, 256, 128, 128, 128)]
+        [TestCase(512, 256, 128, 256, 256)]
+        [TestCase(128,  64, 128, 256, 128)]
+        [TestCase(192, 576, 128, 384, 384)]
+        [TestCase( 32,  96, 128, 384,  96)]
+        public void Resized_ShortSide(int w, int h, int ss, int ls, int expected)
         {
-            using (var resizer = new ImageResizer(new Bitmap(width, height)))
+            using (var resizer = new ImageResizer(new Bitmap(w, h)))
             {
                 resizer.PreserveAspectRatio = true;
                 resizer.ShrinkOnly = true;
-                resizer.ShortSide = size;
-                return resizer.Resized.Width;
+                resizer.ShortSide = ss;
+
+                var img = resizer.Resized;
+                Assert.That(resizer.LongSide, Is.EqualTo(ls));
+                Assert.That(Math.Max(img.Width, img.Height), Is.EqualTo(expected));
             }
         }
 
@@ -294,6 +284,81 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Save_Overwrite
+        ///
+        /// <summary>
+        /// 上書きのテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase("lena.png")]
+        [TestCase("lena-24bpp.jpg")]
+        public void Save_Overwrite(string filename)
+        {
+            using (var resizer = new ImageResizer(Example(filename)))
+            {
+                resizer.Width = 128;
+
+                var ext = IoEx.Path.GetExtension(filename);
+                var dest = SavePath(resizer, "overwrite", ext);
+                resizer.Save(dest);
+                resizer.Save(dest); // overwrite
+
+                Assert.That(IoEx.File.Exists(dest));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AspectRatio
+        ///
+        /// <summary>
+        /// 縦横比を取得するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase("lena.png",      1.000)]
+        [TestCase("portrait.png",  1.146)]
+        [TestCase("landscape.png", 3.813)]
+        public void AspectRatio(string filename, double expected)
+        {
+            using (var resizer = new ImageResizer(Example(filename)))
+            {
+                Assert.That(resizer.AspectRatio, Is.EqualTo(expected).Within(0.01));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ColorDepth
+        ///
+        /// <summary>
+        /// ビット深度を取得するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase("alpha.png",      32, 32)]
+        [TestCase("lena.png",       32, 32)]
+        [TestCase("lena-24bpp.jpg", 24, 24)]
+        [TestCase("lena-24bpp.png", 24, 24)]
+        [TestCase("lena-8bpp.png",   8, 32)]
+        [TestCase("lena-4bpp.png",   4, 32)]
+        [TestCase("gray-16bpp.png", 24, 24)]
+        [TestCase("gray-8bpp.png",   8, 32)]
+        [TestCase("gray-4bpp.png",   4, 32)]
+        [TestCase("gray-1bpp.png",   1, 32)]
+        public void ColorDepth(string filename, int depth, int expected)
+        {
+            using (var resizer = new ImageResizer(Example(filename)))
+            {
+                var actual = Image.GetPixelFormatSize(resizer.Resized.PixelFormat);
+                Assert.That(resizer.ColorDepth, Is.EqualTo(depth));
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Create_Null_Throws
         ///
         /// <summary>
@@ -311,32 +376,6 @@ namespace Cube.Images.Tests
                 }
             },
             Throws.TypeOf<ArgumentException>().And.Message.EqualTo("original"));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Overwrite
-        ///
-        /// <summary>
-        /// 上書きのテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase("lena.png")]
-        [TestCase("lena-24bpp.jpg")]
-        public void Overwrite(string filename)
-        {
-            using (var resizer = new ImageResizer(Example(filename)))
-            {
-                resizer.Width = 128;
-
-                var ext  = IoEx.Path.GetExtension(filename);
-                var dest = SavePath(resizer, "overwrite", ext);
-                resizer.Save(dest);
-                resizer.Save(dest); // overwrite
-
-                Assert.That(IoEx.File.Exists(dest));
-            }
-        }
 
         #endregion
 
