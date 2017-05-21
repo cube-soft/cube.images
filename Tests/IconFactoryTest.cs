@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Reflection;
 using NUnit.Framework;
 using Cube.Images.Icons;
 
@@ -35,10 +36,10 @@ namespace Cube.Images.Tests
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_StockIcon
+        /// GetIcon_StockIcon
         /// 
         /// <summary>
-        /// システムで用意されているアイコンを生成するテストを行います。
+        /// システムで用意されているアイコンを生成するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -46,15 +47,15 @@ namespace Cube.Images.Tests
         [TestCase(StockIcons.Application, IconSize.Large,      ExpectedResult =  32)]
         [TestCase(StockIcons.Application, IconSize.ExtraLarge, ExpectedResult =  48)]
         [TestCase(StockIcons.Application, IconSize.Jumbo,      ExpectedResult = 256)]
-        public int Create_StockIcon(StockIcons id, IconSize size)
-            => IconFactory.Create(id, size).Width;
+        public int GetIcon_StockIcon(StockIcons id, IconSize size)
+            => id.GetIcon(size).Width;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_File
+        /// GetIcon_File
         /// 
         /// <summary>
-        /// ファイルからアイコンを抽出して生成するテストを行います。
+        /// ファイルからアイコンを抽出して生成するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -62,7 +63,40 @@ namespace Cube.Images.Tests
         [TestCase(@"C:\Windows\notepad.exe", IconSize.Large,      ExpectedResult =  32)]
         [TestCase(@"C:\Windows\notepad.exe", IconSize.ExtraLarge, ExpectedResult =  48)]
         [TestCase(@"C:\Windows\notepad.exe", IconSize.Jumbo,      ExpectedResult = 256)]
-        public int Create_File(string path, IconSize size)
-            => IconFactory.Create(path, size).Width;
+        public int GetIcon_File(string path, IconSize size)
+            => new System.IO.FileInfo(path).GetIcon(size).Width;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon_File_NotFound
+        /// 
+        /// <summary>
+        /// 存在しないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetIcon_File_NotFound()
+            => Assert.That(
+                IconFactory.Create("dummy.exe", IconSize.ExtraLarge).Width,
+                Is.EqualTo(48)
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon_Assembly
+        /// 
+        /// <summary>
+        /// Assembly オブジェクトからアイコンを抽出して生成するテストを
+        /// 実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(IconSize.Small,      ExpectedResult =  16)]
+        [TestCase(IconSize.Large,      ExpectedResult =  32)]
+        [TestCase(IconSize.ExtraLarge, ExpectedResult =  48)]
+        [TestCase(IconSize.Jumbo,      ExpectedResult = 256)]
+        public int GetIcon_Assembly(IconSize size)
+            => Assembly.GetExecutingAssembly().GetIcon(size).Width;
     }
 }

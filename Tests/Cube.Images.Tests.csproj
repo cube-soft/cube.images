@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Cube.Images.csproj">
       <Project>{93009dc4-969e-4354-9b32-770b84817ccc}</Project>
@@ -55,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileResource.cs" />
-    <Compile Include="Icons\IconFactoryTest.cs" />
+    <Compile Include="IconFactoryTest.cs" />
     <Compile Include="ImageResizerTest.cs" />
     <Compile Include="ImageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
