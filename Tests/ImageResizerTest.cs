@@ -60,6 +60,7 @@ namespace Cube.Images.Tests
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
+                resizer.Width = width; // ignore
                 resizer.Save(SavePath(resizer, "wbase", ext));
 
                 return resizer.Resized.Height;
@@ -75,17 +76,21 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("lena.png",      128, ExpectedResult = 128)]
-        [TestCase("portrait.png",  128, ExpectedResult = 111)]
-        [TestCase("landscape.png",  32, ExpectedResult = 122)]
-        public int Resized_Height(string filename, int height)
+        [TestCase("lena.png",     256,  true,  true, ExpectedResult =  256)]
+        [TestCase("lena.png",     256, false,  true, ExpectedResult =  512)]
+        [TestCase("lena.png",    1024,  true, false, ExpectedResult = 1024)]
+        [TestCase("lena.png",    1024,  true,  true, ExpectedResult =  512)]
+        [TestCase("portrait.png", 128,  true,  true, ExpectedResult =  111)]
+        [TestCase("landscape.png", 32,  true,  true, ExpectedResult =  122)]
+        public int Resized_Height(string filename, int height, bool preserve, bool shrink)
         {
             using (var resizer = new ImageResizer(Example(filename)))
             {
                 var ext = IoEx.Path.GetExtension(filename);
-                resizer.PreserveAspectRatio = true;
-                resizer.ShrinkOnly = true;
+                resizer.PreserveAspectRatio = preserve;
+                resizer.ShrinkOnly = shrink;
                 resizer.Height = height;
+                resizer.Height = height; // ignore
                 resizer.Save(SavePath(resizer, "hbase", ext));
 
                 return resizer.Resized.Width;
@@ -182,75 +187,78 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save_File_Jpeg
+        /// Save_Jpeg
         ///
         /// <summary>
-        /// JPEG 形式で Stream に書き出すテストを実行します。
+        /// JPEG 形式で保存するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(100, 256, 59000L)]
-        [TestCase( 75, 256, 12000L)]
-        [TestCase( 50, 256,  8000L)]
-        [TestCase( 25, 256,  5000L)]
-        public void Save_Stream_Jpeg(long quality, int width, long expected)
+        [TestCase(100)]
+        [TestCase( 75)]
+        [TestCase( 50)]
+        [TestCase( 25)]
+        public void Save_Jpeg(long quality)
         {
             var filename = "lena.png";
-            using (var dest = new System.IO.MemoryStream())
             using (var resizer = new ImageResizer(Example(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
-                resizer.Width = width;
+                resizer.Width = 256;
+
+                var dest = SavePath(resizer, "jpeg", ".jpg");
                 resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
-                Assert.That(dest.Length, Is.AtLeast(expected));
+                Assert.That(IoEx.File.Exists(dest), Is.True);
             }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save_Stream_Png
+        /// Save_Png
         ///
         /// <summary>
-        /// PNG 形式で Stream に書き出すテストを実行します。
+        /// PNG 形式で保存するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(512, 653000L)]
-        [TestCase(256, 179000L)]
-        [TestCase(128,  46000L)]
-        public void Save_Stream_Png(int width, long expected)
+        [TestCase(512)]
+        [TestCase(256)]
+        [TestCase(128)]
+        public void Save_Png(int width)
         {
             var filename = "lena-24bpp.jpg";
-            using (var dest = new System.IO.MemoryStream())
             using (var resizer = new ImageResizer(Example(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = width;
+
+                var dest = SavePath(resizer, "png", ".png");
                 resizer.Save(dest, Png.Format);
-                Assert.That(dest.Length, Is.AtLeast(expected));
+                Assert.That(IoEx.File.Exists(dest), Is.True);
             }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save_Stream_Bmp
+        /// Save_Bmp
         ///
         /// <summary>
-        /// BMP 形式で Stream に書き出すテストを実行します。
+        /// BMP 形式で保存するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("lena.png",       60000L)]
-        [TestCase("lena-24bpp.jpg", 40000L)]
-        public void Save_Stream_Bmp(string filename, long expected)
+        [TestCase("lena.png")]
+        [TestCase("lena-24bpp.jpg")]
+        public void Save_Bmp(string filename)
         {
-            using (var dest = new System.IO.MemoryStream())
             using (var resizer = new ImageResizer(Example(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = 128;
+
+                var dest = SavePath(resizer, "bmp", ".bmp");
                 resizer.Save(dest, Bmp.Format);
-                Assert.That(dest.Length, Is.AtLeast(expected));
+                Assert.That(IoEx.File.Exists(dest), Is.True);
             }
         }
 
@@ -278,7 +286,7 @@ namespace Cube.Images.Tests
                 var dest = SavePath(resizer, "mode", ext);
                 resizer.Save(dest);
 
-                Assert.That(IoEx.File.Exists(dest));
+                Assert.That(IoEx.File.Exists(dest), Is.True);
             }
         }
 
@@ -304,7 +312,7 @@ namespace Cube.Images.Tests
                 resizer.Save(dest);
                 resizer.Save(dest); // overwrite
 
-                Assert.That(IoEx.File.Exists(dest));
+                Assert.That(IoEx.File.Exists(dest), Is.True);
             }
         }
 
