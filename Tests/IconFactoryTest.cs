@@ -68,6 +68,23 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetIcon_Assembly
+        /// 
+        /// <summary>
+        /// Assembly オブジェクトからアイコンを抽出して生成するテストを
+        /// 実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(IconSize.Small,      ExpectedResult =  16)]
+        [TestCase(IconSize.Large,      ExpectedResult =  32)]
+        [TestCase(IconSize.ExtraLarge, ExpectedResult =  48)]
+        [TestCase(IconSize.Jumbo,      ExpectedResult = 256)]
+        public int GetIcon_Assembly(IconSize size)
+            => Assembly.GetExecutingAssembly().GetIcon(size).Width;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetIcon_File_NotFound
         /// 
         /// <summary>
@@ -84,19 +101,34 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetIcon_Assembly
+        /// GetIcon_FileInfo_Null
         /// 
         /// <summary>
-        /// Assembly オブジェクトからアイコンを抽出して生成するテストを
-        /// 実行します。
+        /// FileInfo オブジェクトが null の場合の挙動を確認します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(IconSize.Small,      ExpectedResult =  16)]
-        [TestCase(IconSize.Large,      ExpectedResult =  32)]
-        [TestCase(IconSize.ExtraLarge, ExpectedResult =  48)]
-        [TestCase(IconSize.Jumbo,      ExpectedResult = 256)]
-        public int GetIcon_Assembly(IconSize size)
-            => Assembly.GetExecutingAssembly().GetIcon(size).Width;
+        [Test]
+        public void GetIcon_FileInfo_Null()
+            => Assert.That(
+                IconFactory.Create(default(System.IO.FileInfo), IconSize.Large).Width,
+                Is.EqualTo(32)
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon_Assembly
+        /// 
+        /// <summary>
+        /// Assembly オブジェクトが null の場合の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetIcon_Assembly_Null()
+            => Assert.That(
+                default(Assembly).GetIcon(IconSize.Small).Width,
+                Is.EqualTo(16)
+            );
     }
 }
