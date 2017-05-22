@@ -470,10 +470,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private void Initialize()
         {
-            if (Original == null || Original.Width < 1 || Original.Height < 1)
-            {
-                throw new ArgumentException("original");
-            }
+            if (Original == null) throw new ArgumentException("original");
 
             _width  = Original.Width;
             _height = Original.Height;
