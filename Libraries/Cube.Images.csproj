@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cube.Core">
+      <HintPath>..\..\packages\Cube.Core.1.4.3\lib\net45\Cube.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.1.4.2\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,9 +58,9 @@
     <Compile Include="Operations\BuiltIn.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="ImageResizer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
