@@ -45,6 +45,10 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="original">
+        /// リサイズ対象となる画像ファイルのパス
+        /// </param>
+        /// 
         /* ----------------------------------------------------------------- */
         public ImageResizer(string original)
         {
@@ -54,7 +58,7 @@ namespace Cube.Images
             {
                 Original = Image.FromStream(stream);
             }
-            Setup();
+            Initialize();
         }
 
         /* ----------------------------------------------------------------- */
@@ -65,12 +69,13 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="original">
+        /// リサイズ対象となる画像ファイルを読み込むストリーム
+        /// </param>
+        /// 
         /* ----------------------------------------------------------------- */
         public ImageResizer(System.IO.Stream original)
-        {
-            Original = Image.FromStream(original);
-            Setup();
-        }
+            : this(Image.FromStream(original)) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -79,6 +84,8 @@ namespace Cube.Images
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <param name="original">リサイズ対象となる画像</param>
         /// 
         /// <remarks>
         /// 指定された Image オブジェクトが NULL の場合、または Image
@@ -89,7 +96,7 @@ namespace Cube.Images
         public ImageResizer(Image original)
         {
             Original = original;
-            Setup();
+            Initialize();
         }
 
         #endregion
@@ -293,7 +300,7 @@ namespace Cube.Images
 
         #endregion
 
-        #region IDisposable Support
+        #region IDisposable
 
         /* ----------------------------------------------------------------- */
         ///
@@ -304,7 +311,8 @@ namespace Cube.Images
         /// </summary>
         /// 
         /// <remarks>
-        /// アンマネージリソースが存在する場合のみ、デストラクタを有効にします。
+        /// アンマネージリソースが存在する場合のみデストラクタを有効に
+        /// します。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -341,7 +349,7 @@ namespace Cube.Images
                 if (disposing)
                 {
                     DisposeImage();
-                    Original?.Dispose();
+                    Original.Dispose();
                 }
                 _disposed = true;
             }
@@ -358,6 +366,8 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path) => Save(path, Original.RawFormat);
@@ -369,6 +379,8 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
+        /// 
+        /// <param name="stream">書き込み用ストリーム</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(System.IO.Stream stream) => Save(stream, Original.RawFormat);
@@ -380,6 +392,9 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="format">保存する画像のフォーマット</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format)
@@ -394,6 +409,9 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
+        /// 
+        /// <param name="stream">書き出し用ストリーム</param>
+        /// <param name="format">保存する画像のフォーマット</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(System.IO.Stream stream, ImageFormat format)
@@ -406,41 +424,15 @@ namespace Cube.Images
         /// <summary>
         /// リサイズ後の Image オブジェクトをファイルに保存します。
         /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="format">保存する画像のフォーマット</param>
+        /// <param name="parameters">付随するパラメータ</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format, EncoderParameters parameters)
-            => Save(path,
-            ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
-            parameters
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// リサイズ後の Image オブジェクトをストリームに書き出します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(System.IO.Stream stream, ImageFormat format, EncoderParameters parameters)
-            => Save(stream,
-            ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
-            parameters
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// リサイズ後の Image オブジェクトをファイルに保存します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string path, ImageCodecInfo codec, EncoderParameters parameters)
         {
-            using (var stream = IoEx.File.Create(path)) Save(stream, codec, parameters);
+            using (var stream = IoEx.File.Create(path)) Save(stream, format, parameters);
         }
 
         /* ----------------------------------------------------------------- */
@@ -451,29 +443,34 @@ namespace Cube.Images
         /// リサイズ後の Image オブジェクトをストリームに書き出します。
         /// </summary>
         ///
+        /// <param name="stream">書き出し用ストリーム</param>
+        /// <param name="format">保存する画像のフォーマット</param>
+        /// <param name="parameters">付随するパラメータ</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public void Save(System.IO.Stream stream, ImageCodecInfo codec, EncoderParameters parameters)
-            => Resized.Save(stream, codec, parameters);
+        public void Save(System.IO.Stream stream, ImageFormat format, EncoderParameters parameters)
+            => Resized.Save(
+                stream,
+                ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == format.Guid),
+                parameters
+            );
 
         #endregion
 
-        #region Others
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Setup
+        /// Initialize
         ///
         /// <summary>
         /// 初期化処理を実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Setup()
+        private void Initialize()
         {
-            if (Original == null || Original.Width < 1 || Original.Height < 1)
-            {
-                throw new ArgumentException("original");
-            }
+            if (Original == null) throw new ArgumentException("original");
 
             _width  = Original.Width;
             _height = Original.Height;
@@ -531,8 +528,6 @@ namespace Cube.Images
                     gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.Default;
                     gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.Default;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -552,14 +547,14 @@ namespace Cube.Images
             _resized = null;
         }
 
-        #endregion
-
         #region Fields
         private bool _disposed = false;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
         private Image _resized;
+        #endregion
+
         #endregion
     }
 

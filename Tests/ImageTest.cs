@@ -15,11 +15,11 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Cube.Images.BuiltIn;
 using NUnit.Framework;
-using IoEx = System.IO;
 
 namespace Cube.Images.Tests
 {
@@ -52,12 +52,30 @@ namespace Cube.Images.Tests
         [TestCase("lena-24bpp.png", ExpectedResult = 24)]
         [TestCase("lena-8bpp.png",  ExpectedResult =  8)]
         [TestCase("lena-4bpp.png",  ExpectedResult =  4)]
-        [TestCase("grey-8bpp.png",  ExpectedResult =  8)]
-        [TestCase("grey-4bpp.png",  ExpectedResult =  4)]
-        [TestCase("grey-1bpp.png",  ExpectedResult =  1)]
+        [TestCase("gray-16bpp.png", ExpectedResult = 24)]
+        [TestCase("gray-8bpp.png",  ExpectedResult =  8)]
+        [TestCase("gray-4bpp.png",  ExpectedResult =  4)]
+        [TestCase("gray-1bpp.png",  ExpectedResult =  1)]
         public int GetColorDepth(string filename)
         {
-            using (var image = Create(filename)) return image.GetColorDepth();
+            using (var image = new Bitmap(Example(filename))) return image.GetColorDepth();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetColorDepth_Null
+        ///
+        /// <summary>
+        /// null オブジェクトに対して GetColorDepth を実行した時の挙動を
+        /// 確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetColorDepth_Null()
+        {
+            var image = default(Bitmap);
+            Assert.That(image.GetColorDepth(), Is.EqualTo(0));
         }
 
         /* ----------------------------------------------------------------- */
@@ -71,16 +89,34 @@ namespace Cube.Images.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("alpha.png",      ExpectedResult = PixelFormat.Format32bppArgb)]
         [TestCase("lena.png",       ExpectedResult = PixelFormat.Format32bppArgb)]
-        [TestCase("lena-24bpp.jpg", ExpectedResult = PixelFormat.Format24bppRgb)]
-        [TestCase("lena-24bpp.png", ExpectedResult = PixelFormat.Format24bppRgb)]
+        [TestCase("lena-24bpp.jpg", ExpectedResult = PixelFormat.Format24bppRgb )]
+        [TestCase("lena-24bpp.png", ExpectedResult = PixelFormat.Format24bppRgb )]
         [TestCase("lena-8bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
         [TestCase("lena-4bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
-        [TestCase("grey-8bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
-        [TestCase("grey-4bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
-        [TestCase("grey-1bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
+        [TestCase("gray-16bpp.png", ExpectedResult = PixelFormat.Format24bppRgb )]
+        [TestCase("gray-8bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
+        [TestCase("gray-4bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
+        [TestCase("gray-1bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
         public PixelFormat GetRgbFormat(string filename)
         {
-            using (var image = Create(filename)) return image.GetRgbFormat();
+            using (var image = new Bitmap(Example(filename))) return image.GetRgbFormat();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetRgbFormat_Null
+        ///
+        /// <summary>
+        /// null オブジェクトに対して GetRgbFormat を実行した時の挙動を
+        /// 確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetRgbFormat_Null()
+        {
+            var image = default(Bitmap);
+            Assert.That(image.GetRgbFormat(), Is.EqualTo(PixelFormat.Undefined));
         }
 
         /* ----------------------------------------------------------------- */
@@ -96,31 +132,58 @@ namespace Cube.Images.Tests
         [TestCase("lena.png",       ExpectedResult = false)]
         [TestCase("lena-24bpp.jpg", ExpectedResult = false)]
         [TestCase("lena-24bpp.png", ExpectedResult = false)]
-        [TestCase("lena-8bpp.png",  ExpectedResult = true)]
-        [TestCase("lena-4bpp.png",  ExpectedResult = true)]
-        [TestCase("grey-8bpp.png",  ExpectedResult = true)]
-        [TestCase("grey-4bpp.png",  ExpectedResult = true)]
-        [TestCase("grey-1bpp.png",  ExpectedResult = true)]
+        [TestCase("lena-8bpp.png",  ExpectedResult =  true)]
+        [TestCase("lena-4bpp.png",  ExpectedResult =  true)]
+        [TestCase("gray-16bpp.png", ExpectedResult = false)]
+        [TestCase("gray-8bpp.png",  ExpectedResult =  true)]
+        [TestCase("gray-4bpp.png",  ExpectedResult =  true)]
+        [TestCase("gray-1bpp.png",  ExpectedResult =  true)]
         public bool IsIndexedColor(string filename)
         {
-            using (var image = Create(filename)) return image.IsIndexedColor();
+            using (var image = new Bitmap(Example(filename))) return image.IsIndexedColor();
         }
-
-        #endregion
-
-        #region Helper methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// IsFormat
         ///
         /// <summary>
-        /// Image オブジェクトを生成します。
+        /// 指定された ImageFormat かどうかを判別するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Image Create(string filename)
-            => new Bitmap(IoEx.Path.Combine(Examples, filename));
+        [TestCaseSource(nameof(IsFormat_TestCases))]
+        public bool IsFormat(string filename, ImageFormat format)
+        {
+            using (var image = new Bitmap(Example(filename))) return image.IsFormat(format);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsFormat_Null
+        ///
+        /// <summary>
+        /// null オブジェクトに対して IsFormat を実行した時の挙動を
+        /// 確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void IsFormat_Null()
+        {
+            var image = default(Bitmap);
+            Assert.That(image.IsFormat(ImageFormat.Png), Is.False);
+        }
+
+        private static IEnumerable<TestCaseData> IsFormat_TestCases
+        {
+            get
+            {
+                yield return new TestCaseData("lena.png", ImageFormat.Png).Returns(true);
+                yield return new TestCaseData("lena.png", ImageFormat.Tiff).Returns(false);
+                yield return new TestCaseData("lena-24bpp.jpg", ImageFormat.Jpeg).Returns(true);
+            }
+        }
 
         #endregion
     }
