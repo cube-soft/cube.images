@@ -92,6 +92,23 @@ namespace Cube.Images.Icons
         /// 指定されたファイルからアイコンを生成します。
         /// </summary>
         /// 
+        /// <param name="fi">ファイル情報</param>
+        /// <param name="size">アイコンサイズ</param>
+        /// 
+        /// <returns>アイコン</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Icon Create(Cube.FileSystem.IInformation fi, IconSize size)
+            => Create(fi?.FullName, size);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// 指定されたファイルからアイコンを生成します。
+        /// </summary>
+        /// 
         /// <param name="path">ファイルのパス</param>
         /// <param name="size">アイコンサイズ</param>
         /// 
@@ -165,7 +182,25 @@ namespace Cube.Images.Icons
         /// <returns>アイコン</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon GetIcon(this System.IO.FileInfo fi, IconSize size) => Create(fi, size);
+        public static Icon GetIcon(this System.IO.FileInfo fi, IconSize size)
+            => Create(fi, size);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon
+        ///
+        /// <summary>
+        /// 指定されたファイルからアイコンを取得します。
+        /// </summary>
+        ///
+        /// <param name="fi">ファイル情報</param>
+        /// <param name="size">アイコンサイズ</param>
+        /// 
+        /// <returns>アイコン</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Icon GetIcon(this Cube.FileSystem.IInformation fi, IconSize size)
+            => Create(fi, size);
 
         /* ----------------------------------------------------------------- */
         ///

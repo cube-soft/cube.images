@@ -52,7 +52,7 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetIcon_File
+        /// GetIcon_FileInfo
         /// 
         /// <summary>
         /// ファイルからアイコンを抽出して生成するテストを実行します。
@@ -63,8 +63,25 @@ namespace Cube.Images.Tests
         [TestCase(@"C:\Windows\notepad.exe", IconSize.Large,      ExpectedResult =  32)]
         [TestCase(@"C:\Windows\notepad.exe", IconSize.ExtraLarge, ExpectedResult =  48)]
         [TestCase(@"C:\Windows\notepad.exe", IconSize.Jumbo,      ExpectedResult = 256)]
-        public int GetIcon_File(string path, IconSize size)
+        public int GetIcon_FileInfo(string path, IconSize size)
             => new System.IO.FileInfo(path).GetIcon(size).Width;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon_IInformation
+        /// 
+        /// <summary>
+        /// ファイルからアイコンを抽出して生成するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(@"C:\Windows\notepad.exe", IconSize.Small,      ExpectedResult = 16)]
+        [TestCase(@"C:\Windows\notepad.exe", IconSize.Large,      ExpectedResult = 32)]
+        [TestCase(@"C:\Windows\notepad.exe", IconSize.ExtraLarge, ExpectedResult = 48)]
+        [TestCase(@"C:\Windows\notepad.exe", IconSize.Jumbo,      ExpectedResult = 256)]
+        public int GetIcon_IInformation(string path, IconSize size)
+            => new Cube.FileSystem.Operator(new Cube.FileSystem.Alpha())
+                       .Get(path).GetIcon(size).Width;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -112,6 +129,22 @@ namespace Cube.Images.Tests
         public void GetIcon_FileInfo_Null()
             => Assert.That(
                 IconFactory.Create(default(System.IO.FileInfo), IconSize.Large).Width,
+                Is.EqualTo(32)
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIcon_IInformation_Null
+        /// 
+        /// <summary>
+        /// IInformation オブジェクトが null の場合の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetIcon_IInformation_Null()
+            => Assert.That(
+                IconFactory.Create(default(Cube.FileSystem.IInformation), IconSize.Large).Width,
                 Is.EqualTo(32)
             );
 

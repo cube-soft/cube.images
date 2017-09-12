@@ -15,21 +15,21 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.IO;
 using System.Reflection;
+using Cube.FileSystem;
 
 namespace Cube.Images.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileResource
+    /// FileHandler
     /// 
     /// <summary>
     /// テストでファイルを使用するためのクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    class FileResource
+    class FileHandler
     {
         #region Constructors
 
@@ -42,18 +42,44 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileResource()
+        protected FileHandler() : this(new Operator()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileResource
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected FileHandler(Operator io)
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
-            Root = Path.GetDirectoryName(reader.Location);
-            _folder = GetType().FullName.Replace($"{reader.Product}.", "");
-            if (!Directory.Exists(Results)) Directory.CreateDirectory(Results);
-            Clean(Results);
+            IO = io;
+            Root = IO.Get(reader.Location).DirectoryName;
+            _directory = GetType().FullName.Replace($"{reader.Product}.", "");
+
+            if (!IO.Exists(Results)) IO.CreateDirectory(Results);
+            Delete(Results);
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IO
+        ///
+        /// <summary>
+        /// ファイル操作用オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected Operator IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -76,7 +102,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Examples => Path.Combine(Root, "Examples");
+        protected string Examples => IO.Combine(Root, "Examples");
 
         /* ----------------------------------------------------------------- */
         ///
@@ -87,7 +113,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Results => Path.Combine(Root, $@"Results\{_folder}");
+        protected string Results => IO.Combine(Root, $@"Results\{_directory}");
 
         #endregion
 
@@ -107,7 +133,7 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected string Example(string filename)
-            => Path.Combine(Examples, filename);
+            => IO.Combine(Examples, filename);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -123,7 +149,7 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected string Result(string filename)
-            => Path.Combine(Results, filename);
+            => IO.Combine(Results, filename);
 
         #endregion
 
@@ -131,30 +157,26 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Clean
+        /// Delete
         /// 
         /// <summary>
-        /// 指定されたフォルダ内に存在する全てのファイルを削除します。
+        /// 指定されたフォルダ内に存在する全てのファイルおよびフォルダを
+        /// 削除します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Clean(string folder)
+        private void Delete(string directory)
         {
-            foreach (string file in Directory.GetFiles(folder))
+            foreach (string f in IO.GetFiles(directory)) IO.Delete(f);
+            foreach (string d in IO.GetDirectories(directory))
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
-            }
-
-            foreach (string sub in Directory.GetDirectories(folder))
-            {
-                Clean(sub);
-                Directory.Delete(sub);
+                Delete(d);
+                IO.Delete(d);
             }
         }
 
         #region Fields
-        private string _folder = string.Empty;
+        private string _directory = string.Empty;
         #endregion
 
         #endregion
