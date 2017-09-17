@@ -30,7 +30,6 @@ namespace Cube.Images.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class IconFactoryTest
     {

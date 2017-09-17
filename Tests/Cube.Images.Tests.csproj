@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileHandler.cs" />
+    <Compile Include="Details\GlobalSetup.cs" />
     <Compile Include="IconFactoryTest.cs" />
     <Compile Include="ImageResizerTest.cs" />
     <Compile Include="ImageTest.cs" />
