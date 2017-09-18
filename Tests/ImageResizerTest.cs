@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
-using IoEx = System.IO;
 
 namespace Cube.Images.Tests
 {
@@ -33,7 +32,7 @@ namespace Cube.Images.Tests
     /// 
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ImageResizerTest : FileResource
+    class ImageResizerTest : FileHandler
     {
         #region Tests
 
@@ -56,7 +55,7 @@ namespace Cube.Images.Tests
         {
             using (var resizer = new ImageResizer(Example(filename)))
             {
-                var ext = IoEx.Path.GetExtension(filename);
+                var ext = IO.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
@@ -86,7 +85,7 @@ namespace Cube.Images.Tests
         {
             using (var resizer = new ImageResizer(Example(filename)))
             {
-                var ext = IoEx.Path.GetExtension(filename);
+                var ext = IO.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Height = height;
@@ -173,7 +172,7 @@ namespace Cube.Images.Tests
         public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var src = IoEx.File.Open(Example(filename), IoEx.FileMode.Open, IoEx.FileAccess.Read))
+            using (var src = IO.OpenRead(Example(filename)))
             using (var resizer = new ImageResizer(src))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
@@ -208,7 +207,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "jpeg", ".jpg");
                 resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
-                Assert.That(IoEx.File.Exists(dest), Is.True);
+                Assert.That(IO.Exists(dest), Is.True);
             }
         }
 
@@ -234,7 +233,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "png", ".png");
                 resizer.Save(dest, Png.Format);
-                Assert.That(IoEx.File.Exists(dest), Is.True);
+                Assert.That(IO.Exists(dest), Is.True);
             }
         }
 
@@ -258,7 +257,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "bmp", ".bmp");
                 resizer.Save(dest, Bmp.Format);
-                Assert.That(IoEx.File.Exists(dest), Is.True);
+                Assert.That(IO.Exists(dest), Is.True);
             }
         }
 
@@ -282,11 +281,11 @@ namespace Cube.Images.Tests
                 resizer.ResizeMode = mode;
                 resizer.Width = 256;
 
-                var ext  = IoEx.Path.GetExtension(filename);
+                var ext  = IO.Get(filename).Extension;
                 var dest = SavePath(resizer, "mode", ext);
                 resizer.Save(dest);
 
-                Assert.That(IoEx.File.Exists(dest), Is.True);
+                Assert.That(IO.Exists(dest), Is.True);
             }
         }
 
@@ -307,12 +306,12 @@ namespace Cube.Images.Tests
             {
                 resizer.Width = 128;
 
-                var ext = IoEx.Path.GetExtension(filename);
+                var ext = IO.Get(filename).Extension;
                 var dest = SavePath(resizer, "overwrite", ext);
                 resizer.Save(dest);
                 resizer.Save(dest); // overwrite
 
-                Assert.That(IoEx.File.Exists(dest), Is.True);
+                Assert.That(IO.Exists(dest), Is.True);
             }
         }
 

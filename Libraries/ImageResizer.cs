@@ -19,8 +19,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Cube.FileSystem;
 using Cube.Images.BuiltIn;
-using IoEx = System.IO;
 
 namespace Cube.Images
 {
@@ -45,19 +45,27 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="original">
-        /// リサイズ対象となる画像ファイルのパス
-        /// </param>
+        /// <param name="original">リサイズ対象ファイル</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string original)
+        public ImageResizer(string original) : this(original, new Operator()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ImageResizer
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="original">リサイズ対象ファイル</param>
+        /// <param name="io">ファイル入出力用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ImageResizer(string original, Operator io)
         {
-            var mode   = System.IO.FileMode.Open;
-            var access = System.IO.FileAccess.Read;
-            using (var stream = IoEx.File.Open(original, mode, access))
-            {
-                Original = Image.FromStream(stream);
-            }
+            _io = io;
+            using (var s = _io.OpenRead(original)) Original = Image.FromStream(s);
             Initialize();
         }
 
@@ -330,7 +338,7 @@ namespace Cube.Images
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -399,7 +407,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format)
         {
-            using (var stream = IoEx.File.Create(path)) Save(stream, format);
+            using (var s = _io.Create(path)) Save(s, format);
         }
 
         /* ----------------------------------------------------------------- */
@@ -432,7 +440,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format, EncoderParameters parameters)
         {
-            using (var stream = IoEx.File.Create(path)) Save(stream, format, parameters);
+            using (var s = _io.Create(path)) Save(s, format, parameters);
         }
 
         /* ----------------------------------------------------------------- */
@@ -553,6 +561,7 @@ namespace Cube.Images
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
         private Image _resized;
+        private Operator _io;
         #endregion
 
         #endregion
