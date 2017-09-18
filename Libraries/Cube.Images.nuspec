@@ -6,18 +6,13 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
+    <copyright>$copyright$</copyright>
+    <description>Cube image library.</description>
+    <releaseNotes>Private release.</releaseNotes>
+    <tags>Cube Windows Image</tags>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/cube-soft/Cube.Images/blob/master/License.txt</licenseUrl>
     <projectUrl>https://github.com/cube-soft/Cube.Images</projectUrl>
     <iconUrl>https://github.com/cube-soft/Cube.Images/blob/master/Icon.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Cube image library.</description>
-    <releaseNotes>Private release.</releaseNotes>
-    <copyright>$copyright$</copyright>
-    <tags>Cube Windows Image</tags>
-    <dependencies>
-      <dependency id="Cube.Core" version="1.5.0" />
-      <dependency id="Cube.FileSystem" version="1.5.0" />
-      <dependency id="log4net" version="2.0.8" />
-    </dependencies>
   </metadata>
 </package>
