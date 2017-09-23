@@ -64,7 +64,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\FileHandler.cs" />
+    <Compile Include="Details\FileHelper.cs" />
     <Compile Include="Details\GlobalSetup.cs" />
     <Compile Include="IconFactoryTest.cs" />
     <Compile Include="ImageResizerTest.cs" />
