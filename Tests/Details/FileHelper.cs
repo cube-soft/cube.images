@@ -35,7 +35,7 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// FileHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -46,7 +46,7 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// FileHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
