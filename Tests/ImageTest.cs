@@ -33,7 +33,7 @@ namespace Cube.Images.Tests
     /// 
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ImageTest : FileHandler
+    class ImageTest : FileHelper
     {
         #region Tests
 

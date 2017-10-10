@@ -32,7 +32,7 @@ namespace Cube.Images.Tests
     /// 
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ImageResizerTest : FileHandler
+    class ImageResizerTest : FileHelper
     {
         #region Tests
 
