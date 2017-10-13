@@ -79,8 +79,7 @@ namespace Cube.Images.Tests
         [TestCase(@"C:\Windows\notepad.exe", IconSize.ExtraLarge, ExpectedResult = 48)]
         [TestCase(@"C:\Windows\notepad.exe", IconSize.Jumbo,      ExpectedResult = 256)]
         public int GetIcon_IInformation(string path, IconSize size)
-            => new Cube.FileSystem.Operator(new Cube.FileSystem.Alpha())
-                       .Get(path).GetIcon(size).Width;
+            => new Cube.FileSystem.AfsOperator().Get(path).GetIcon(size).Width;
 
         /* ----------------------------------------------------------------- */
         ///
