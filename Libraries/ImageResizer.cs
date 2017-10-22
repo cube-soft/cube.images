@@ -324,7 +324,7 @@ namespace Cube.Images
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        ~ImageResizer() { Dispose(false); }
+        ~ImageResizer() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -337,7 +337,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -352,14 +352,10 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    DisposeImage();
-                    Original.Dispose();
-                }
-                _disposed = true;
+                DisposeImage();
+                Original.Dispose();
             }
         }
 
@@ -478,6 +474,8 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private void Initialize()
         {
+            _dispose = new OnceAction<bool>(Dispose);
+
             if (Original == null) throw new ArgumentException("original");
 
             _width  = Original.Width;
@@ -556,7 +554,7 @@ namespace Cube.Images
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
