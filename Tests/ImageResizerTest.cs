@@ -172,8 +172,7 @@ namespace Cube.Images.Tests
         public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var src = IO.OpenRead(Example(filename)))
-            using (var resizer = new ImageResizer(src))
+            using (var resizer = new ImageResizer(IO.OpenRead(Example(filename))))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.PreserveAspectRatio = true;
