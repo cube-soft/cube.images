@@ -132,13 +132,7 @@ namespace Cube.Images
         ///
         /* ----------------------------------------------------------------- */
         public Image Resized
-        {
-            get
-            {
-                if (_resized == null) _resized = Resize();
-                return _resized;
-            }
-        }
+            => _resized = _resized ?? Resize();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -156,7 +150,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public int Width
         {
-            get { return _width; }
+            get => _width;
             set
             {
                 if (_width == value) return;
@@ -183,7 +177,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public int Height
         {
-            get { return _height; }
+            get => _height;
             set
             {
                 if (_height == value) return;
@@ -211,7 +205,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public int LongSide
         {
-            get { return Original.Width < Original.Height ? Height : Width; }
+            get => (Original.Width < Original.Height) ? Height : Width;
             set
             {
                 if (Original.Width < Original.Height) Height = value;
@@ -236,7 +230,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public int ShortSide
         {
-            get { return Original.Width < Original.Height ? Width : Height; }
+            get => (Original.Width < Original.Height) ? Width : Height;
             set
             {
                 if (Original.Width < Original.Height) Width = value;
