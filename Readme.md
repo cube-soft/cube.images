@@ -6,11 +6,12 @@ Cube.Images
 
 Cube.Images is an image library for CubeSoft applications.
 
-## Requirements
+## Dependencies
 
-* [AlphaFS](http://alphafs.alphaleonis.com/) ... Optional
+* [AlphaFS](http://alphafs.alphaleonis.com/)
+* [Cube.Core](https://github.com/cube-soft/Cube.Core)
+* [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
 * [log4net](https://logging.apache.org/log4net/)
-* [NUnit](http://nunit.org/)
 
 ## License
 
