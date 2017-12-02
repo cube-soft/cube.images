@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("Cube.Images")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Image library for CubeSoft applications.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CubeSoft")]
 [assembly: AssemblyProduct("Cube.Images")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.2.0")]
-[assembly: AssemblyFileVersion("1.5.2.0")]
+[assembly: AssemblyVersion("1.6.0.0")]
+[assembly: AssemblyFileVersion("1.6.0.0")]

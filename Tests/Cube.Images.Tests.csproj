@@ -52,16 +52,16 @@
       <HintPath>..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.Net35.1.5.2\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.Net35.1.6.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\packages\Cube.FileSystem.Net35.1.5.2\lib\net35\Cube.FileSystem.dll</HintPath>
+      <HintPath>..\..\packages\Cube.FileSystem.Net35.1.6.0\lib\net35\Cube.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.3.8.1\lib\net35\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.3.9.0\lib\net35\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
