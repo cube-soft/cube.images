@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,15 +23,15 @@ namespace Cube.Images.BuiltIn
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// BuiltIn.Operations
-    /// 
+    /// ImageOperator
+    ///
     /// <summary>
     /// System.Drawing.Image 等の .NET Framework にビルトインされた
     /// イメージクラスへの拡張メソッドを定義するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class Operations
+    public static class ImageOperator
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -41,17 +41,17 @@ namespace Cube.Images.BuiltIn
         /// Image オブジェクトが指定されたイメージフォーマとかどうか
         /// 判別します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">Image オブジェクト</param>
         /// <param name="format">イメージフォーマット</param>
-        /// 
+        ///
         /// <returns>
         /// 指定されたイメージフォーマットに合致するかどうかを示す値
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static bool IsFormat(this Image src, ImageFormat format)
-            => src?.RawFormat.Equals(format) ?? false;
+        public static bool IsFormat(this Image src, ImageFormat format) =>
+            src?.RawFormat.Equals(format) ?? false;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -60,14 +60,14 @@ namespace Cube.Images.BuiltIn
         /// <summary>
         /// インデックスカラーかどうかを判別します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">Image オブジェクト</param>
-        /// 
+        ///
         /// <returns>インデックスカラーかどうかを示す値</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static bool IsIndexedColor(this Image src)
-            => src != null && new PixelFormat[]
+        public static bool IsIndexedColor(this Image src) =>
+            src != null && new PixelFormat[]
             {
                 PixelFormat.Format1bppIndexed,
                 PixelFormat.Format4bppIndexed,
@@ -82,14 +82,14 @@ namespace Cube.Images.BuiltIn
         /// <summary>
         /// Image オブジェクトのビット深度を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">Image オブジェクト</param>
-        /// 
+        ///
         /// <returns>ビット深度</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public static int GetColorDepth(this Image src)
-            => Image.GetPixelFormatSize(src?.PixelFormat ?? PixelFormat.Undefined);
+        public static int GetColorDepth(this Image src) =>
+            Image.GetPixelFormatSize(src?.PixelFormat ?? PixelFormat.Undefined);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -99,13 +99,13 @@ namespace Cube.Images.BuiltIn
         /// Image オブジェクトを RGB カラーで表現する場合の PixelFormat を
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">Image オブジェクト</param>
-        /// 
+        ///
         /// <returns>
         /// RGB カラーで表現する場合の PixelFormat
         /// </returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static PixelFormat GetRgbFormat(this Image src)
         {

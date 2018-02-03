@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -25,11 +25,11 @@ namespace Cube.Images.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// ImageResizerTest
-    /// 
+    ///
     /// <summary>
     /// ImageResizer のテスト用クラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
     class ImageResizerTest : FileHelper
@@ -373,15 +373,14 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Create_Null_Throws()
-            => Assert.That(() =>
+        public void Create_Null_Throws() => Assert.That(() =>
+        {
+            using (var resizer = new ImageResizer(default(Bitmap)))
             {
-                using (var resizer = new ImageResizer(default(Bitmap)))
-                {
-                    Assert.Fail("never reached");
-                }
-            },
-            Throws.TypeOf<ArgumentException>().And.Message.EqualTo("original"));
+                Assert.Fail("never reached");
+            }
+        },
+        Throws.TypeOf<ArgumentException>().And.Message.EqualTo("original"));
 
         #endregion
 
