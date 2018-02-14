@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.Images
     /* --------------------------------------------------------------------- */
     ///
     /// Jpeg
-    /// 
+    ///
     /// <summary>
     /// JPEG のフォーマットに関わる設定を補助するためのメソッドを定義した
     /// クラスです。
@@ -38,7 +38,7 @@ namespace Cube.Images
         /// <summary>
         /// JPEG を表す ImageFormat オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static ImageFormat Format => ImageFormat.Jpeg;
 
@@ -49,7 +49,7 @@ namespace Cube.Images
         /// <summary>
         /// JPEG の品質を表すオブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static EncoderParameters Quality(long value)
         {
@@ -62,7 +62,7 @@ namespace Cube.Images
     /* --------------------------------------------------------------------- */
     ///
     /// Png
-    /// 
+    ///
     /// <summary>
     /// PNG のフォーマットに関わる設定を補助するためのメソッドを定義した
     /// クラスです。
@@ -78,7 +78,7 @@ namespace Cube.Images
         /// <summary>
         /// PNG を表す ImageFormat オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static ImageFormat Format => ImageFormat.Png;
     }
@@ -86,7 +86,7 @@ namespace Cube.Images
     /* --------------------------------------------------------------------- */
     ///
     /// Bmp
-    /// 
+    ///
     /// <summary>
     /// BMP のフォーマットに関わる設定を補助するためのメソッドを定義した
     /// クラスです。
@@ -102,7 +102,7 @@ namespace Cube.Images
         /// <summary>
         /// BMP を表す ImageFormat オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static ImageFormat Format => ImageFormat.Bmp;
     }
