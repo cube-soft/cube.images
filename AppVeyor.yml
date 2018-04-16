@@ -1,4 +1,4 @@
-version: 1.8.0.{build}
+version: 1.8.1.{build}
 branches:
     only:
         - master
@@ -14,7 +14,7 @@ before_build:
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget restore Cube.Images.sln
-build: 
+build:
     parallel: true
     project: Cube.Images.sln
     publish_nuget: true
@@ -25,4 +25,3 @@ after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
     - codecov -f CoverResult.xml
-    
