@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem;
+using Cube.Images.BuiltIn;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using Cube.FileSystem;
-using Cube.Images.BuiltIn;
 
 namespace Cube.Images
 {
@@ -527,6 +527,8 @@ namespace Cube.Images
                     gs.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.Default;
                     gs.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.Default;
                     break;
+                default:
+                    break;
             }
         }
 
@@ -550,11 +552,11 @@ namespace Cube.Images
 
         #region Fields
         private OnceAction<bool> _dispose;
+        private readonly Operator _io;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
         private Image _resized;
-        private Operator _io;
         #endregion
     }
 

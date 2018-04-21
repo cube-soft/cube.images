@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
 using Cube.FileSystem;
+using System.Reflection;
 
 namespace Cube.Images.Tests
 {
@@ -175,7 +175,7 @@ namespace Cube.Images.Tests
         #endregion
 
         #region Fields
-        private string _directory = string.Empty;
+        private readonly string _directory = string.Empty;
         #endregion
     }
 }
