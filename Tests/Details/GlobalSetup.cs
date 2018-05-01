@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
 using Cube.Log;
 using NUnit.Framework;
+using System.Reflection;
 
 namespace Cube.Images.Tests
 {
@@ -45,9 +45,9 @@ namespace Cube.Images.Tests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            LogOperator.Configure();
-            LogOperator.ObserveTaskException();
-            LogOperator.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
+            Logger.Configure();
+            Logger.ObserveTaskException();
+            Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
 }

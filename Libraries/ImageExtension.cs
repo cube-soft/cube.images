@@ -23,15 +23,15 @@ namespace Cube.Images.BuiltIn
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ImageOperator
+    /// ImageExtension
     ///
     /// <summary>
     /// System.Drawing.Image 等の .NET Framework にビルトインされた
-    /// イメージクラスへの拡張メソッドを定義するクラスです。
+    /// イメージクラスに対する拡張用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class ImageOperator
+    public static class ImageExtension
     {
         /* ----------------------------------------------------------------- */
         ///

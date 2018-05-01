@@ -48,7 +48,7 @@ namespace Cube.Images
         /// <param name="original">リサイズ対象ファイル</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string original) : this(original, new Operator()) { }
+        public ImageResizer(string original) : this(original, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -62,7 +62,7 @@ namespace Cube.Images
         /// <param name="io">ファイル入出力用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string original, Operator io)
+        public ImageResizer(string original, IO io)
         {
             _io = io;
             using (var s = _io.OpenRead(original)) Original = Image.FromStream(s);
@@ -552,7 +552,7 @@ namespace Cube.Images
 
         #region Fields
         private OnceAction<bool> _dispose;
-        private readonly Operator _io;
+        private readonly IO _io;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
