@@ -33,6 +33,8 @@ namespace Cube.Images.BuiltIn
     /* --------------------------------------------------------------------- */
     public static class ImageExtension
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// IsFormat
@@ -137,5 +139,7 @@ namespace Cube.Images.BuiltIn
                     return PixelFormat.Format32bppArgb;
             }
         }
+
+        #endregion
     }
 }
