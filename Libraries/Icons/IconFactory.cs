@@ -56,9 +56,8 @@ namespace Cube.Images.Icons
             Shell32.NativeMethods.SHGetStockIconInfo((uint)si,
                 Shell32.NativeMethods.SHGFI_SYSICONINDEX, ref info);
 
-            IImageList images;
             Shell32.NativeMethods.SHGetImageList((uint)size,
-                Shell32.NativeMethods.IID_IImageList, out images);
+                Shell32.NativeMethods.IID_IImageList, out IImageList images);
             if (images == null) return null;
 
             var handle = IntPtr.Zero;
@@ -121,9 +120,8 @@ namespace Cube.Images.Icons
             Shell32.NativeMethods.SHGetFileInfo(path, 0, ref info, (uint)Marshal.SizeOf(info),
                 Shell32.NativeMethods.SHGFI_SYSICONINDEX);
 
-            IImageList images;
             Shell32.NativeMethods.SHGetImageList((uint)size,
-                Shell32.NativeMethods.IID_IImageList, out images);
+                Shell32.NativeMethods.IID_IImageList, out IImageList images);
             if (images == null) return null;
 
             var handle = IntPtr.Zero;

@@ -43,10 +43,10 @@
       <HintPath>..\..\packages\Cube.Backwards.1.4.1\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.1.8.1\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.1.9.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\packages\Cube.FileSystem.1.8.1\lib\net35\Cube.FileSystem.dll</HintPath>
+      <HintPath>..\..\packages\Cube.FileSystem.1.9.0\lib\net35\Cube.FileSystem.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +67,7 @@
     <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
     <Compile Include="NativeMethods\Structures\SHStockIconInfo.cs" />
     <Compile Include="NativeMethods\Shell32.cs" />
-    <Compile Include="Operations\BuiltIn.cs" />
+    <Compile Include="ImageExtension.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="ImageResizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
