@@ -132,16 +132,16 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetIcon_IInformation_Null
+        /// GetIcon_Information_Null
         ///
         /// <summary>
-        /// IInformation オブジェクトが null の場合の挙動を確認します。
+        /// Information オブジェクトが null の場合の挙動を確認します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetIcon_IInformation_Null() => Assert.That(
-            IconFactory.Create(default(Cube.FileSystem.IInformation), IconSize.Large).Width,
+        public void GetIcon_Information_Null() => Assert.That(
+            IconFactory.Create(default(Cube.FileSystem.Information), IconSize.Large).Width,
             Is.EqualTo(32)
         );
 
