@@ -97,7 +97,7 @@ namespace Cube.Images.Icons
         /// <returns>アイコン</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon Create(Cube.FileSystem.IInformation fi, IconSize size) =>
+        public static Icon Create(Cube.FileSystem.Information fi, IconSize size) =>
             Create(fi?.FullName, size);
 
         /* ----------------------------------------------------------------- */
@@ -197,7 +197,7 @@ namespace Cube.Images.Icons
         /// <returns>アイコン</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon GetIcon(this Cube.FileSystem.IInformation fi, IconSize size) =>
+        public static Icon GetIcon(this Cube.FileSystem.Information fi, IconSize size) =>
             Create(fi, size);
 
         /* ----------------------------------------------------------------- */

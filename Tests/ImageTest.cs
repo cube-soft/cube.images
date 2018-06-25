@@ -72,11 +72,10 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetColorDepth_Null()
-        {
-            var image = default(Bitmap);
-            Assert.That(image.GetColorDepth(), Is.EqualTo(0));
-        }
+        public void GetColorDepth_Null() => Assert.That(
+            default(Bitmap).GetColorDepth(),
+            Is.EqualTo(0)
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -113,11 +112,10 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetRgbFormat_Null()
-        {
-            var image = default(Bitmap);
-            Assert.That(image.GetRgbFormat(), Is.EqualTo(PixelFormat.Undefined));
-        }
+        public void GetRgbFormat_Null() => Assert.That(
+            default(Bitmap).GetRgbFormat(),
+            Is.EqualTo(PixelFormat.Undefined)
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -145,18 +143,34 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsFormat
+        /// GetImageFormat
         ///
         /// <summary>
-        /// 指定された ImageFormat かどうかを判別するテストを実行します。
+        /// ImageFormat オブジェクトを取得するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(IsFormat_TestCases))]
-        public bool IsFormat(string filename, ImageFormat format)
+        [TestCaseSource(nameof(TestCases))]
+        public ImageFormat GetImageFormat(string filename)
         {
-            using (var image = new Bitmap(Example(filename))) return image.IsFormat(format);
+            using (var src = new Bitmap(Example(filename))) return src.GetImageFormat();
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetImageFormat_Null
+        ///
+        /// <summary>
+        /// null オブジェクトに対して GetImageFormat を実行した時の挙動を
+        /// 確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetImageFormat_Null() => Assert.That(
+            default(Bitmap).GetImageFormat(),
+            Is.Null
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -169,19 +183,30 @@ namespace Cube.Images.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void IsFormat_Null()
-        {
-            var image = default(Bitmap);
-            Assert.That(image.IsFormat(ImageFormat.Png), Is.False);
-        }
+        public void IsFormat_Null() => Assert.That(
+            default(Bitmap).IsFormat(ImageFormat.Png),
+            Is.False
+        );
 
-        private static IEnumerable<TestCaseData> IsFormat_TestCases
+        #endregion
+
+        #region TestCases
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TestCases
+        ///
+        /// <summary>
+        /// テストデータを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IEnumerable<TestCaseData> TestCases
         {
             get
             {
-                yield return new TestCaseData("lena.png", ImageFormat.Png).Returns(true);
-                yield return new TestCaseData("lena.png", ImageFormat.Tiff).Returns(false);
-                yield return new TestCaseData("lena-24bpp.jpg", ImageFormat.Jpeg).Returns(true);
+                yield return new TestCaseData("lena.png").Returns(ImageFormat.Png);
+                yield return new TestCaseData("lena-24bpp.jpg").Returns(ImageFormat.Jpeg);
             }
         }
 

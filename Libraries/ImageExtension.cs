@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -95,10 +96,32 @@ namespace Cube.Images.BuiltIn
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetImageFormat
+        ///
+        /// <summary>
+        /// Image オブジェクトに対応する ImageFormat オブジェクトを
+        /// 取得します。システムに登録されているオブジェクトと一致した
+        /// 場合、RawFormat の代わりにそれらが返されます。
+        /// </summary>
+        ///
+        /// <param name="src">Image オブジェクト</param>
+        ///
+        /// <returns>ImageFormat オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static ImageFormat GetImageFormat(this Image src)
+        {
+            if (src == null) return default(ImageFormat);
+            var cmp = GetImageFormats();
+            return cmp.FirstOrDefault(e => src.IsFormat(e)) ?? src.RawFormat;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetRgbFormat
         ///
         /// <summary>
-        /// Image オブジェクトを RGB カラーで表現する場合の PixelFormat を
+        /// Image オブジェクトを RGB カラーで表現した時の PixelFormat を
         /// 取得します。
         /// </summary>
         ///
@@ -112,34 +135,70 @@ namespace Cube.Images.BuiltIn
         public static PixelFormat GetRgbFormat(this Image src)
         {
             if (src == null) return PixelFormat.Undefined;
-
-            switch (src.PixelFormat)
-            {
-                case PixelFormat.Format16bppRgb555:
-                case PixelFormat.Format16bppRgb565:
-                case PixelFormat.Format24bppRgb:
-                case PixelFormat.Format32bppArgb:
-                case PixelFormat.Format32bppPArgb:
-                case PixelFormat.Format32bppRgb:
-                case PixelFormat.Format48bppRgb:
-                case PixelFormat.Format64bppArgb:
-                case PixelFormat.Format64bppPArgb:
-                    return src.PixelFormat;
-                // case PixelFormat.DontCare:
-                // case PixelFormat.Extended:
-                // case PixelFormat.Alpha:
-                // case PixelFormat.PAlpha:
-                // case PixelFormat.Indexed:
-                // case PixelFormat.Format1bppIndexed:
-                // case PixelFormat.Format4bppIndexed:
-                // case PixelFormat.Format8bppIndexed:
-                // case PixelFormat.Format16bppGrayScale:
-                // case PixelFormat.Format16bppArgb1555:
-                default:
-                    return PixelFormat.Format32bppArgb;
-            }
+            return GetRgbFormats().Contains(src.PixelFormat) ?
+                   src.PixelFormat :
+                   PixelFormat.Format32bppArgb;
         }
 
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetImageFormats
+        ///
+        /// <summary>
+        /// システムに登録されている ImageFormat オブジェクト一覧を取得
+        /// します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IList<ImageFormat> GetImageFormats() => _fmt ?? (
+            _fmt = new List<ImageFormat>
+            {
+                ImageFormat.Jpeg,
+                ImageFormat.Png,
+                ImageFormat.Gif,
+                ImageFormat.Bmp,
+                ImageFormat.MemoryBmp,
+                ImageFormat.Icon,
+                ImageFormat.Tiff,
+                ImageFormat.Wmf,
+                ImageFormat.Emf,
+                ImageFormat.Exif,
+            }
+        );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetRgbFormats
+        ///
+        /// <summary>
+        /// RGB カラーを表す PixelFormat オブジェクト一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static HashSet<PixelFormat> GetRgbFormats() => _rgb ?? (
+            _rgb = new HashSet<PixelFormat>
+            {
+                PixelFormat.Format16bppRgb555,
+                PixelFormat.Format16bppRgb565,
+                PixelFormat.Format24bppRgb,
+                PixelFormat.Format32bppArgb,
+                PixelFormat.Format32bppPArgb,
+                PixelFormat.Format32bppRgb,
+                PixelFormat.Format48bppRgb,
+                PixelFormat.Format64bppArgb,
+                PixelFormat.Format64bppPArgb,
+            }
+        );
+
+        #endregion
+
+        #region Fields
+        private static IList<ImageFormat> _fmt;
+        private static HashSet<PixelFormat> _rgb;
         #endregion
     }
 }
