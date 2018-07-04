@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.Tests;
 using Cube.Images.BuiltIn;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Cube.Images.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ImageTest : FileHelper
+    class ImageTest : FileFixture
     {
         #region Tests
 
@@ -58,7 +59,7 @@ namespace Cube.Images.Tests
         [TestCase("gray-1bpp.png",  ExpectedResult =  1)]
         public int GetColorDepth(string filename)
         {
-            using (var image = new Bitmap(Example(filename))) return image.GetColorDepth();
+            using (var image = Create(filename)) return image.GetColorDepth();
         }
 
         /* ----------------------------------------------------------------- */
@@ -98,7 +99,7 @@ namespace Cube.Images.Tests
         [TestCase("gray-1bpp.png",  ExpectedResult = PixelFormat.Format32bppArgb)]
         public PixelFormat GetRgbFormat(string filename)
         {
-            using (var image = new Bitmap(Example(filename))) return image.GetRgbFormat();
+            using (var image = Create(filename)) return image.GetRgbFormat();
         }
 
         /* ----------------------------------------------------------------- */
@@ -138,7 +139,7 @@ namespace Cube.Images.Tests
         [TestCase("gray-1bpp.png",  ExpectedResult =  true)]
         public bool IsIndexedColor(string filename)
         {
-            using (var image = new Bitmap(Example(filename))) return image.IsIndexedColor();
+            using (var image = Create(filename)) return image.IsIndexedColor();
         }
 
         /* ----------------------------------------------------------------- */
@@ -153,7 +154,7 @@ namespace Cube.Images.Tests
         [TestCaseSource(nameof(TestCases))]
         public ImageFormat GetImageFormat(string filename)
         {
-            using (var src = new Bitmap(Example(filename))) return src.GetImageFormat();
+            using (var src = Create(filename)) return src.GetImageFormat();
         }
 
         /* ----------------------------------------------------------------- */
@@ -209,6 +210,21 @@ namespace Cube.Images.Tests
                 yield return new TestCaseData("lena-24bpp.jpg").Returns(ImageFormat.Jpeg);
             }
         }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Image オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private Image Create(string src) => Image.FromFile(GetExamplesWith(src));
 
         #endregion
     }
