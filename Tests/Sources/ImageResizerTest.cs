@@ -385,7 +385,7 @@ namespace Cube.Images.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Others
 
         /* ----------------------------------------------------------------- */
         ///
