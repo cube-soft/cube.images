@@ -33,7 +33,7 @@ namespace Cube.Images
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ImageResizer : IDisposable
+    public class ImageResizer : DisposableBase
     {
         #region Constructors
 
@@ -45,10 +45,10 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="original">リサイズ対象ファイル</param>
+        /// <param name="src">リサイズ対象ファイル</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string original) : this(original, new IO()) { }
+        public ImageResizer(string src) : this(src, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -58,14 +58,14 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="original">リサイズ対象ファイル</param>
+        /// <param name="src">リサイズ対象ファイル</param>
         /// <param name="io">ファイル入出力用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string original, IO io)
+        public ImageResizer(string src, IO io)
         {
-            _io = io;
-            using (var s = _io.OpenRead(original)) Original = Image.FromStream(s);
+            IO = io;
+            using (var s = IO.OpenRead(src)) Original = Image.FromStream(s);
             Initialize();
         }
 
@@ -77,13 +77,12 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="original">
+        /// <param name="src">
         /// リサイズ対象となる画像ファイルを読み込むストリーム
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(System.IO.Stream original) :
-            this(Image.FromStream(original)) { }
+        public ImageResizer(System.IO.Stream src) : this(Image.FromStream(src)) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -93,7 +92,7 @@ namespace Cube.Images
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="original">リサイズ対象となる画像</param>
+        /// <param name="src">リサイズ対象となる画像</param>
         ///
         /// <remarks>
         /// 指定された Image オブジェクトが NULL の場合、または Image
@@ -101,15 +100,26 @@ namespace Cube.Images
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(Image original)
+        public ImageResizer(Image src)
         {
-            Original = original;
+            Original = src;
             Initialize();
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IO
+        ///
+        /// <summary>
+        /// Gets the I/O handler.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -131,7 +141,7 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Image Resized => _resized = _resized ?? Resize();
+        public Image Resized => _resized ?? (_resized = Resize());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -301,59 +311,6 @@ namespace Cube.Images
 
         #endregion
 
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ImageResizer
-        ///
-        /// <summary>
-        /// デストラクタを実行します。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// アンマネージリソースが存在する場合のみデストラクタを有効に
-        /// します。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ImageResizer() { _dispose.Invoke(false); }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースオブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースオブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                DisposeImage();
-                Original.Dispose();
-            }
-        }
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -396,7 +353,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format)
         {
-            using (var s = _io.Create(path)) Save(s, format);
+            using (var s = IO.Create(path)) Save(s, format);
         }
 
         /* ----------------------------------------------------------------- */
@@ -429,7 +386,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format, EncoderParameters parameters)
         {
-            using (var s = _io.Create(path)) Save(s, format, parameters);
+            using (var s = IO.Create(path)) Save(s, format, parameters);
         }
 
         /* ----------------------------------------------------------------- */
@@ -458,6 +415,24 @@ namespace Cube.Images
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースオブジェクトを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DisposeImage();
+                Original.Dispose();
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Initialize
         ///
         /// <summary>
@@ -467,8 +442,6 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         private void Initialize()
         {
-            _dispose = new OnceAction<bool>(Dispose);
-
             if (Original == null) throw new ArgumentException("original");
 
             _width  = Original.Width;
@@ -551,8 +524,6 @@ namespace Cube.Images
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private readonly IO _io;
         private int _width = 0;
         private int _height = 0;
         private double _ratio = 1.0; // 幅を基準とした縦横比
