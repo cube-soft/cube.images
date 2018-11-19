@@ -5,7 +5,8 @@ Cube.Images
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/ffsk5mc9i8o9iy72?svg=true)](https://ci.appveyor.com/project/clown/cube-images)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.Images/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.Images)
 
-Cube.Images is an image library for CubeSoft applications.
+Cube.Images is an image library.
+The library is available for .NET Framework 3.5, 4.5 or more.
 
 ## Installation
 
@@ -31,5 +32,5 @@ Or select it from the NuGet packages UI on Visual Studio.
 
 ## License
 
-Copyright &copy; 2010 [CubeSoft, Inc.](https://www.cube-soft.jp/)
+Copyright © 2010 [CubeSoft, Inc.](https://www.cube-soft.jp/)
 The project is licensed under the [Apache 2.0](https://github.com/cube-soft/Cube.Images/blob/master/License.txt).
