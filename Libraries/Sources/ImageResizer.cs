@@ -21,6 +21,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Threading;
 
 namespace Cube.Images
 {
@@ -427,7 +428,7 @@ namespace Cube.Images
             if (disposing)
             {
                 DisposeImage();
-                Original.Dispose();
+                Original?.Dispose();
             }
         }
 
@@ -514,12 +515,7 @@ namespace Cube.Images
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void DisposeImage()
-        {
-            if (_resized == null) return;
-            _resized.Dispose();
-            _resized = null;
-        }
+        private void DisposeImage() => Interlocked.Exchange(ref _resized, null)?.Dispose();
 
         #endregion
 
