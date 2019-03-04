@@ -1,14 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Version>1.15.0</Version>
+        <Description>Image library for CubeSoft libraries and applications.</Description>
         <Authors>CubeSoft</Authors>
         <Company>CubeSoft</Company>
-        <Description>Image library for CubeSoft libraries and applications.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/cube-soft/Cube.Images</PackageProjectUrl>
-        <PackageIconUrl>https://github.com/cube-soft/Cube.Images/blob/master/Icon.png?raw=true</PackageIconUrl>
-        <RootNamespace>Cube.Images</RootNamespace>
+        <PackageProjectUrl>https://github.com/cube-soft/$(AssemblyName)</PackageProjectUrl>
+        <PackageIconUrl>https://github.com/cube-soft/$(AssemblyName)/blob/master/Icon.png?raw=true</PackageIconUrl>
         <TargetFramework>net45</TargetFramework>
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
