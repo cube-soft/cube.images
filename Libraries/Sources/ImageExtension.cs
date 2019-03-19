@@ -111,7 +111,7 @@ namespace Cube.Images.BuiltIn
         /* ----------------------------------------------------------------- */
         public static ImageFormat GetImageFormat(this Image src)
         {
-            if (src == null) return default(ImageFormat);
+            if (src == null) return default;
             var cmp = GetImageFormats();
             return cmp.FirstOrDefault(e => src.IsFormat(e)) ?? src.RawFormat;
         }
