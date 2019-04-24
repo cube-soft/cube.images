@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
+using Cube.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace Cube.Images.Tests
         [TestCase("landscape.png", 128,  true,  true, ExpectedResult =   33)]
         public int Resized_Width(string filename, int width, bool preserve, bool shrink)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 var ext = IO.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
@@ -84,7 +84,7 @@ namespace Cube.Images.Tests
         [TestCase("landscape.png", 32,  true,  true, ExpectedResult =  122)]
         public int Resized_Height(string filename, int height, bool preserve, bool shrink)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 var ext = IO.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
@@ -173,7 +173,7 @@ namespace Cube.Images.Tests
         public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var resizer = new ImageResizer(IO.OpenRead(GetExamplesWith(filename))))
+            using (var resizer = new ImageResizer(IO.OpenRead(GetSource(filename))))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.PreserveAspectRatio = true;
@@ -200,7 +200,7 @@ namespace Cube.Images.Tests
         public void Save_Jpeg(long quality)
         {
             var filename = "lena.png";
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = 256;
@@ -226,7 +226,7 @@ namespace Cube.Images.Tests
         public void Save_Png(int width)
         {
             var filename = "lena-24bpp.jpg";
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = width;
@@ -250,7 +250,7 @@ namespace Cube.Images.Tests
         [TestCase("lena-24bpp.jpg")]
         public void Save_Bmp(string filename)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.Width = 128;
@@ -276,7 +276,7 @@ namespace Cube.Images.Tests
         public void Save_ResizeMode(ImageResizeMode mode)
         {
             var filename = "lena.png";
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 resizer.ResizeMode = mode;
                 resizer.Width = 256;
@@ -302,7 +302,7 @@ namespace Cube.Images.Tests
         [TestCase("lena-24bpp.jpg")]
         public void Save_Overwrite(string filename)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 resizer.Width = 128;
 
@@ -329,7 +329,7 @@ namespace Cube.Images.Tests
         [TestCase("landscape.png", 3.813)]
         public void AspectRatio(string filename, double expected)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 Assert.That(resizer.AspectRatio, Is.EqualTo(expected).Within(0.01));
             }
@@ -356,7 +356,7 @@ namespace Cube.Images.Tests
         [TestCase("gray-1bpp.png",   1, 32)]
         public void ColorDepth(string filename, int depth, int expected)
         {
-            using (var resizer = new ImageResizer(GetExamplesWith(filename)))
+            using (var resizer = new ImageResizer(GetSource(filename)))
             {
                 var actual = Image.GetPixelFormatSize(resizer.Resized.PixelFormat);
                 Assert.That(resizer.ColorDepth, Is.EqualTo(depth));
@@ -408,7 +408,7 @@ namespace Cube.Images.Tests
             if (resizer.PreserveAspectRatio) items.Add("preserve");
             if (resizer.ShrinkOnly) items.Add("shrink");
 
-            return GetResultsWith($"{string.Join("-", items)}{extension}");
+            return Get($"{string.Join("-", items)}{extension}");
         }
 
         #endregion

@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
 using Cube.Images.BuiltIn;
+using Cube.Tests;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Drawing;
@@ -224,7 +224,7 @@ namespace Cube.Images.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Image Create(string src) => Image.FromFile(GetExamplesWith(src));
+        private Image Create(string src) => Image.FromFile(GetSource(src));
 
         #endregion
     }
