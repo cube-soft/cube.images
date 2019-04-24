@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -97,7 +98,7 @@ namespace Cube.Images.Icons
         /// <returns>アイコン</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon Create(Cube.FileSystem.Information fi, IconSize size) =>
+        public static Icon Create(Information fi, IconSize size) =>
             Create(fi?.FullName, size);
 
         /* ----------------------------------------------------------------- */
@@ -197,7 +198,7 @@ namespace Cube.Images.Icons
         /// <returns>アイコン</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Icon GetIcon(this Cube.FileSystem.Information fi, IconSize size) =>
+        public static Icon GetIcon(this Information fi, IconSize size) =>
             Create(fi, size);
 
         /* ----------------------------------------------------------------- */

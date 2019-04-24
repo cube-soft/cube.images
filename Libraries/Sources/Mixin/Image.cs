@@ -20,15 +20,14 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 
-namespace Cube.Images.BuiltIn
+namespace Cube.Mixin.Drawing
 {
     /* --------------------------------------------------------------------- */
     ///
     /// ImageExtension
     ///
     /// <summary>
-    /// System.Drawing.Image 等の .NET Framework にビルトインされた
-    /// イメージクラスに対する拡張用クラスです。
+    /// Provides extende methods of classes in the System.Drawing namespace.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

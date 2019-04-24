@@ -15,14 +15,14 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Images.BuiltIn;
+using Cube.Mixin.Drawing;
 using Cube.Tests;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Cube.Images.Tests
+namespace Cube.Images.Tests.Mixin
 {
     /* --------------------------------------------------------------------- */
     ///
