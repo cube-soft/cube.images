@@ -16,7 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem;
-using Cube.Images.BuiltIn;
+using Cube.Mixin.Drawing;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;

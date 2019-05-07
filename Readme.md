@@ -7,7 +7,7 @@ Cube.Images
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.Images/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.Images)
 
 Cube.Images is an image library.
-The library is available for .NET Framework 3.5, 4.5 or higher.
+The library is available for .NET Framework 3.5, 4.5 or later.
 
 ## Installation
 
