@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Collections;
 using Cube.Tests;
 using NUnit.Framework;
 using System;
@@ -408,7 +409,7 @@ namespace Cube.Images.Tests
             if (resizer.PreserveAspectRatio) items.Add("preserve");
             if (resizer.ShrinkOnly) items.Add("shrink");
 
-            return Get($"{string.Join("-", items.ToArray())}{extension}");
+            return Get($"{items.Join("-")}{extension}");
         }
 
         #endregion

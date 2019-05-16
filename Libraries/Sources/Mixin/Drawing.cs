@@ -24,14 +24,14 @@ namespace Cube.Mixin.Drawing
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ImageExtension
+    /// Extension
     ///
     /// <summary>
     /// Provides extende methods of classes in the System.Drawing namespace.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class ImageExtension
+    public static class Extension
     {
         #region Methods
 

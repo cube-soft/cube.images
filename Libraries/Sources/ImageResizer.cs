@@ -536,7 +536,7 @@ namespace Cube.Images
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum ImageResizeMode : uint
+    public enum ImageResizeMode
     {
         /// <summary>既定の方法</summary>
         Default,
