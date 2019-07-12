@@ -141,7 +141,7 @@ namespace Cube.Images.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void GetIcon_Information_Null() => Assert.That(
-            IconFactory.Create(default(Cube.FileSystem.Information), IconSize.Large).Width,
+            IconFactory.Create(default(FileSystem.Entity), IconSize.Large).Width,
             Is.EqualTo(32)
         );
 
