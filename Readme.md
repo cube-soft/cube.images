@@ -6,13 +6,16 @@ Cube.Images
 [![Azure Pipelines](https://dev.azure.com/cube-soft-jp/Cube.Images/_apis/build/status/cube-soft.Cube.Images?branchName=master)](https://dev.azure.com/cube-soft-jp/Cube.Images/_build)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.Images/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.Images)
 
-Cube.Images is an image library, which is available for .NET Framework 3.5, 4.5, or later.
+Cube.Images is an image library available for .NET Framework 3.5, 4.5, or later.
 
 ## Installation
 
-You can install using NuGet like this:
+You can install the library through the NuGet package.
+Add a dependency in your project file using the following syntax:
 
-    PM> Install-Package Cube.Images
+    <ItemGroup>
+        <PackageReference Include="Cube.Images" Version="1.17.0" />
+    </ItemGroup>
 
 Or select it from the NuGet packages UI on Visual Studio.
 
