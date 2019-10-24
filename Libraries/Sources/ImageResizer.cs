@@ -427,7 +427,6 @@ namespace Cube.Images
         {
             if (disposing)
             {
-                DisposeImage();
                 Original?.Dispose();
             }
         }
