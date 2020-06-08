@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>1.15.0</Version>
+        <Version>1.15.10</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
+        <StartupObject>Cube.Images.Tests.Program</StartupObject>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net35</TargetFramework>
+        <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
         <ApplicationIcon>App.ico</ApplicationIcon>
     </PropertyGroup>
@@ -15,17 +19,20 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+        <Prefer32Bit>true</Prefer32Bit>
         <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Libraries\Cube.Images.csproj" />
-        <PackageReference Include="NUnit" Version="3.11.0" />
-        <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+        <PackageReference Include="NUnit" Version="3.12.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+        <PackageReference Include="Appveyor.TestLogger" Version="2.0.0" />
         <PackageReference Include="OpenCover" Version="4.7.922" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config" />
         <None Include="Examples\**\*" CopyToOutputDirectory="Always" />
+        <None Include="App.*" />
     </ItemGroup>
 </Project>
