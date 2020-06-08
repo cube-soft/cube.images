@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>1.15.0</Version>
+        <Version>1.15.10</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>Image library for CubeSoft libraries and applications.</Description>
@@ -8,11 +8,12 @@
         <PackageTags>Cube;Image</PackageTags>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cube-soft/$(AssemblyName)</PackageProjectUrl>
-        <PackageIconUrl>https://github.com/cube-soft/$(AssemblyName)/blob/master/Icon.png?raw=true</PackageIconUrl>
+        <PackageIcon>images\Icon.png</PackageIcon>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\Cube.snk</AssemblyOriginatorKeyFile>
@@ -22,6 +23,9 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Cube.FileSystem" Version="1.15.0" />
+        <PackageReference Include="Cube.FileSystem" Version="1.15.10" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\Icon.png" Pack="true" PackagePath="images" />
     </ItemGroup>
 </Project>
