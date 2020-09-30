@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Reflection;
 using Cube.Images.Icons;
 using NUnit.Framework;
-using System.Reflection;
 
 namespace Cube.Images.Tests
 {

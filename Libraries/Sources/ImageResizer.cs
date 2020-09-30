@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem;
-using Cube.Mixin.Drawing;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading;
+using Cube.FileSystem;
+using Cube.Mixin.Drawing;
 
 namespace Cube.Images
 {

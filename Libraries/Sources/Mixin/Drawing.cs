@@ -153,21 +153,19 @@ namespace Cube.Mixin.Drawing
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IList<ImageFormat> GetImageFormats() => _fmt ?? (
-            _fmt = new List<ImageFormat>
-            {
-                ImageFormat.Jpeg,
-                ImageFormat.Png,
-                ImageFormat.Gif,
-                ImageFormat.Bmp,
-                ImageFormat.MemoryBmp,
-                ImageFormat.Icon,
-                ImageFormat.Tiff,
-                ImageFormat.Wmf,
-                ImageFormat.Emf,
-                ImageFormat.Exif,
-            }
-        );
+        private static IList<ImageFormat> GetImageFormats() => _fmt ??= new List<ImageFormat>
+        {
+            ImageFormat.Jpeg,
+            ImageFormat.Png,
+            ImageFormat.Gif,
+            ImageFormat.Bmp,
+            ImageFormat.MemoryBmp,
+            ImageFormat.Icon,
+            ImageFormat.Tiff,
+            ImageFormat.Wmf,
+            ImageFormat.Emf,
+            ImageFormat.Exif,
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -178,20 +176,18 @@ namespace Cube.Mixin.Drawing
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static HashSet<PixelFormat> GetRgbFormats() => _rgb ?? (
-            _rgb = new HashSet<PixelFormat>
-            {
-                PixelFormat.Format16bppRgb555,
-                PixelFormat.Format16bppRgb565,
-                PixelFormat.Format24bppRgb,
-                PixelFormat.Format32bppArgb,
-                PixelFormat.Format32bppPArgb,
-                PixelFormat.Format32bppRgb,
-                PixelFormat.Format48bppRgb,
-                PixelFormat.Format64bppArgb,
-                PixelFormat.Format64bppPArgb,
-            }
-        );
+        private static HashSet<PixelFormat> GetRgbFormats() => _rgb ??= new HashSet<PixelFormat>
+        {
+            PixelFormat.Format16bppRgb555,
+            PixelFormat.Format16bppRgb565,
+            PixelFormat.Format24bppRgb,
+            PixelFormat.Format32bppArgb,
+            PixelFormat.Format32bppPArgb,
+            PixelFormat.Format32bppRgb,
+            PixelFormat.Format48bppRgb,
+            PixelFormat.Format64bppArgb,
+            PixelFormat.Format64bppPArgb,
+        };
 
         #endregion
 
