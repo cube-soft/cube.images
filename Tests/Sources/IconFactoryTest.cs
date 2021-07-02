@@ -69,22 +69,6 @@ namespace Cube.Images.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetIcon_IInformation
-        ///
-        /// <summary>
-        /// ファイルからアイコンを抽出して生成するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase(@"C:\Windows\notepad.exe", IconSize.Small,      ExpectedResult = 16)]
-        [TestCase(@"C:\Windows\notepad.exe", IconSize.Large,      ExpectedResult = 32)]
-        [TestCase(@"C:\Windows\notepad.exe", IconSize.ExtraLarge, ExpectedResult = 48)]
-        [TestCase(@"C:\Windows\notepad.exe", IconSize.Jumbo,      ExpectedResult = 256)]
-        public int GetIcon_IInformation(string path, IconSize size) =>
-            new Cube.FileSystem.AlphaFS.IO().Get(path).GetIcon(size).Width;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetIcon_Assembly
         ///
         /// <summary>

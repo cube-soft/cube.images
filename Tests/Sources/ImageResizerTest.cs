@@ -18,8 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Cube.FileSystem;
 using Cube.Mixin.Collections;
-using Cube.Mixin.IO;
 using Cube.Tests;
 using NUnit.Framework;
 
@@ -58,7 +58,7 @@ namespace Cube.Images.Tests
         {
             using (var resizer = new ImageResizer(GetSource(filename)))
             {
-                var ext = IO.Get(filename).Extension;
+                var ext = Io.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Width = width;
@@ -88,7 +88,7 @@ namespace Cube.Images.Tests
         {
             using (var resizer = new ImageResizer(GetSource(filename)))
             {
-                var ext = IO.Get(filename).Extension;
+                var ext = Io.Get(filename).Extension;
                 resizer.PreserveAspectRatio = preserve;
                 resizer.ShrinkOnly = shrink;
                 resizer.Height = height;
@@ -175,7 +175,7 @@ namespace Cube.Images.Tests
         public void Save_Stream(string filename, int width, long expected)
         {
             using (var dest = new System.IO.MemoryStream())
-            using (var resizer = new ImageResizer(IO.OpenRead(GetSource(filename))))
+            using (var resizer = new ImageResizer(Io.Open(GetSource(filename))))
             {
                 resizer.ResizeMode = ImageResizeMode.HighQuality;
                 resizer.PreserveAspectRatio = true;
@@ -209,7 +209,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "jpeg", ".jpg");
                 resizer.Save(dest, Jpeg.Format, Jpeg.Quality(quality));
-                Assert.That(IO.Exists(dest), Is.True);
+                Assert.That(Io.Exists(dest), Is.True);
             }
         }
 
@@ -235,7 +235,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "png", ".png");
                 resizer.Save(dest, Png.Format);
-                Assert.That(IO.Exists(dest), Is.True);
+                Assert.That(Io.Exists(dest), Is.True);
             }
         }
 
@@ -259,7 +259,7 @@ namespace Cube.Images.Tests
 
                 var dest = SavePath(resizer, "bmp", ".bmp");
                 resizer.Save(dest, Bmp.Format);
-                Assert.That(IO.Exists(dest), Is.True);
+                Assert.That(Io.Exists(dest), Is.True);
             }
         }
 
@@ -283,11 +283,11 @@ namespace Cube.Images.Tests
                 resizer.ResizeMode = mode;
                 resizer.Width = 256;
 
-                var ext  = IO.Get(filename).Extension;
+                var ext  = Io.Get(filename).Extension;
                 var dest = SavePath(resizer, "mode", ext);
                 resizer.Save(dest);
 
-                Assert.That(IO.Exists(dest), Is.True);
+                Assert.That(Io.Exists(dest), Is.True);
             }
         }
 
@@ -308,12 +308,12 @@ namespace Cube.Images.Tests
             {
                 resizer.Width = 128;
 
-                var ext = IO.Get(filename).Extension;
+                var ext = Io.Get(filename).Extension;
                 var dest = SavePath(resizer, "overwrite", ext);
                 resizer.Save(dest);
                 resizer.Save(dest); // overwrite
 
-                Assert.That(IO.Exists(dest), Is.True);
+                Assert.That(Io.Exists(dest), Is.True);
             }
         }
 

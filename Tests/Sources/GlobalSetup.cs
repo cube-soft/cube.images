@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
+using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.Images.Tests
@@ -44,8 +45,8 @@ namespace Cube.Images.Tests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Logger.ObserveTaskException();
-            Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
+            _ = Logger.ObserveTaskException();
+            Logger.LogInfo(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
 }
