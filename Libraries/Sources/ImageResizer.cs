@@ -49,24 +49,9 @@ namespace Cube.Images
         /// <param name="src">リサイズ対象ファイル</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ImageResizer(string src) : this(src, new IO()) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ImageResizer
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="src">リサイズ対象ファイル</param>
-        /// <param name="io">ファイル入出力用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ImageResizer(string src, IO io)
+        public ImageResizer(string src)
         {
-            IO = io;
-            using (var s = IO.OpenRead(src)) Original = Image.FromStream(s);
+            using (var s = Io.Open(src)) Original = Image.FromStream(s);
             Initialize();
         }
 
@@ -110,17 +95,6 @@ namespace Cube.Images
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -354,7 +328,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format)
         {
-            using (var s = IO.Create(path)) Save(s, format);
+            using (var s = Io.Create(path)) Save(s, format);
         }
 
         /* ----------------------------------------------------------------- */
@@ -387,7 +361,7 @@ namespace Cube.Images
         /* ----------------------------------------------------------------- */
         public void Save(string path, ImageFormat format, EncoderParameters parameters)
         {
-            using (var s = IO.Create(path)) Save(s, format, parameters);
+            using (var s = Io.Create(path)) Save(s, format, parameters);
         }
 
         /* ----------------------------------------------------------------- */
