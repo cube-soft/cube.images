@@ -6,7 +6,7 @@
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <StartupObject>Cube.Images.Tests.Program</StartupObject>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net45</TargetFramework>
+        <TargetFramework>net5.0-windows</TargetFramework>
         <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
@@ -25,7 +25,6 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Libraries\Cube.Images.csproj" />
-        <PackageReference Include="Cube.FileSystem.AlphaFS" Version="4.0.0" />
         <PackageReference Include="Cube.Tests" Version="4.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.*" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.*" />
