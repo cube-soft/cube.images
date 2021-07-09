@@ -13,15 +13,10 @@ You can install the library through the NuGet package.
 Add a dependency in your project file using the following syntax:
 
     <ItemGroup>
-        <PackageReference Include="Cube.Images" Version="3.1.0" />
+        <PackageReference Include="Cube.Images" Version="4.0.0" />
     </ItemGroup>
 
 Or select it from the NuGet packages UI on Visual Studio.
-
-## Dependencies
-
-* [Cube.Core](https://github.com/cube-soft/Cube.Core)
-* [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
 
 ## Contributing
 
