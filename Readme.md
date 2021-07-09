@@ -5,7 +5,7 @@ Cube.Images
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/ffsk5mc9i8o9iy72?svg=true)](https://ci.appveyor.com/project/clown/cube-images)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.Images/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.Images)
 
-Cube.Images is an image library available for .NET Framework 3.5, 4.5, or later.
+Cube.Images is an image library available for .NET Framework 3.5, 4.5, .NET Standard 2.0, or later.
 
 ## Installation
 
