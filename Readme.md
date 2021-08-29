@@ -1,7 +1,7 @@
 Cube.Images
 ====
 
-[![Package](https://badgen.net/nuget/v/cube.images)](https://www.fuget.org/packages/cube.images/)
+[![Package](https://badgen.net/nuget/v/cube.images)](https://www.nuget.org/packages/cube.images/)
 [![AppVeyor](https://badgen.net/appveyor/ci/clown/cube-images)](https://ci.appveyor.com/project/clown/cube-images)
 [![Codecov](https://badgen.net/codecov/c/github/cube-soft/cube.images)](https://codecov.io/gh/cube-soft/cube.images)
 
@@ -12,9 +12,7 @@ Cube.Images is an image library available for .NET Framework 3.5, 4.5, .NET Stan
 You can install the library through the NuGet package.
 Add a dependency in your project file using the following syntax:
 
-    <ItemGroup>
-        <PackageReference Include="Cube.Images" Version="4.0.1" />
-    </ItemGroup>
+    <PackageReference Include="Cube.Images" Version="4.0.2" />
 
 Or select it from the NuGet packages UI on Visual Studio.
 
