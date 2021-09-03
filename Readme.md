@@ -12,7 +12,7 @@ Cube.Images is an image library available for .NET Framework 3.5, 4.5, .NET Stan
 You can install the library through the NuGet package.
 Add a dependency in your project file using the following syntax:
 
-    <PackageReference Include="Cube.Images" Version="4.0.2" />
+    <PackageReference Include="Cube.Images" Version="5.0.0" />
 
 Or select it from the NuGet packages UI on Visual Studio.
 
